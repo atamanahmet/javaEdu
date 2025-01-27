@@ -1,73 +1,119 @@
 package part14;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class App extends Application {
+    int rollCount = 100;
+
     public static void main(String[] args) {
         launch(App.class);
     }
 
     public void start(Stage window) {
-        List<String> lines = new ArrayList<>();
-        Map<String, Integer> dataMap = new HashMap<>();
-        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        XYChart.Series<String, Number> dataSeries = new XYChart.Series<>();
 
-        readFile(lines);
-        for (String line : lines) {
-            dataMap.put(line.split(", ")[0], Integer.valueOf(line.split(", ")[1]));
+        LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
 
-            // dataSeries.getData().add(new XYChart.Data<>(line.split(", ")[0],
-            // Integer.valueOf(line.split(", ")[1])));
+        BorderPane borderPane = new BorderPane();
 
-        }
-        System.out.println(dataMap);
-        List<Map.Entry<String, Integer>> sortedData = new ArrayList<>(dataMap.entrySet());
-        Collections.sort(sortedData, new Comparator<Map.Entry<String, Integer>>() {
-            public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
-                return entry2.getValue() - entry1.getValue();
+        HBox hbox = new HBox();
+
+        Button button100 = new Button("100 Rolls");
+        Button button500 = new Button("500 Rolls");
+        Button button1000 = new Button("1000 Rolls");
+
+        Random randomNum = new Random();
+
+        hbox.getChildren().addAll(button100, button500, button1000);
+
+        yAxis.setLowerBound(1);
+        yAxis.setUpperBound(6);
+        yAxis.setTickUnit(1);
+        yAxis.setMinorTickVisible(false);
+        yAxis.setAutoRanging(false);
+
+        yAxis.setTickLabelFormatter(new StringConverter<Number>() {
+            public Number fromString(String string) {
+                int num = Integer.valueOf(string);
+                return num;
+
+            }
+
+            public String toString(Number Number) {
+                return String.valueOf(Number);
             }
         });
+        button100.setOnAction(e -> {
+            int sum = 0;
+            XYChart.Series<Number, Number> dataPoints = new XYChart.Series<>();
 
-        for (Map.Entry<String, Integer> pair : sortedData) {
-            dataSeries.getData().add(new XYChart.Data<>(pair.getKey(), pair.getValue()));
+            rollCount = 100;
+            lineChart.getData().clear();
+            for (int i = 1; i <= rollCount; i++) {
+                sum += randomNum.nextInt(6) + 1;
+                dataPoints.getData().add(new XYChart.Data<>(i, 1.0 * sum / i));
 
-        }
+            }
+            lineChart.getData().add(dataPoints);
 
-        barChart.getData().add(dataSeries);
+        });
+        button500.setOnAction(e -> {
+            int sum = 0;
+            XYChart.Series<Number, Number> dataPoints = new XYChart.Series<>();
 
-        Scene scene = new Scene(barChart);
+            rollCount = 500;
+            lineChart.getData().clear();
 
+            for (int i = 1; i <= rollCount; i++) {
+                sum += randomNum.nextInt(6) + 1;
+                dataPoints.getData().add(new XYChart.Data<>(i, 1.0 * sum / i));
+
+            }
+            lineChart.getData().add(dataPoints);
+
+        });
+        button1000.setOnAction(e -> {
+            int sum = 0;
+            XYChart.Series<Number, Number> dataPoints = new XYChart.Series<>();
+
+            rollCount = 1000;
+            lineChart.getData().clear();
+
+            for (int i = 1; i <= rollCount; i++) {
+                sum += randomNum.nextInt(6) + 1;
+                dataPoints.getData().add(new XYChart.Data<>(i, 1.0 * sum / i));
+
+            }
+            lineChart.getData().add(dataPoints);
+
+        });
+
+        // for (int i = 1; i <= rollCount; i++) {
+        // int sum = 0;
+
+        // sum += randomNum.nextInt(6) + 1;
+        // dataPoints.getData().add(new XYChart.Data<>(i, 1.0 * sum / i));
+
+        // }
+        // lineChart.getData().add(dataPoints);
+
+        borderPane.setTop(hbox);
+        borderPane.setCenter(lineChart);
+
+        Scene scene = new Scene(borderPane);
         window.setScene(scene);
         window.show();
-    }
-
-    public void readFile(List<String> lines) {
-        try {
-            BufferedReader buffread = new BufferedReader(new FileReader("data.txt"));
-            buffread.lines().forEach(line -> lines.add(line));
-            buffread.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }
 }
