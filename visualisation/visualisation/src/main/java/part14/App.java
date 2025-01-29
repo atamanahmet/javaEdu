@@ -1,183 +1,96 @@
 package part14;
 
-import java.util.Random;
-
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    Color color;
-
     public static void main(String[] args) {
-        launch(args);
+        launch(App.class);
+
     }
 
     public void start(Stage window) {
-        // Canvas canvas = new Canvas(150, 150);
-        // // ColorPicker colorPicker = new ColorPicker();
-        // GraphicsContext painter = canvas.getGraphicsContext2D();
-        BorderPane borderPane = new BorderPane();
-        Image imageFile = new Image("file:test.jpg");
+        Image imageFile = new Image("file:LisaGirl.jpg");
 
-        int height = (int) imageFile.getHeight();
         int width = (int) imageFile.getWidth();
+        int height = (int) imageFile.getHeight();
 
-        PixelReader reader = imageFile.getPixelReader();
-        WritableImage finalImage = new WritableImage(width, height);
+        PixelReader pixelReader = imageFile.getPixelReader();
 
-        PixelWriter writer = finalImage.getPixelWriter();
+        WritableImage finalimage = new WritableImage(width, height);
+        // WritableImage smallImage = new WritableImage(width / 2, height / 2);
 
-        Slider redSlider = new Slider();
-        Slider greenSlider = new Slider();
-        Slider blueSlider = new Slider();
+        PixelWriter pixelWriter = finalimage.getPixelWriter();
 
-        redSlider.setMax(1);
-        redSlider.setMin(0);
-        redSlider.setMajorTickUnit(1);
-        redSlider.setMajorTickUnit(0.5);
-        redSlider.setShowTickLabels(true);
+        drawOriginImage(height, width, pixelReader, pixelWriter);
+        drawSmallImage(height, width, pixelReader, pixelWriter);
+        // copySmallImage(height, width, pixelReader, pixelWriter, height / 2, width /
+        // 2);
 
-        greenSlider.setMax(1);
-        greenSlider.setMin(0);
-        greenSlider.setMajorTickUnit(1);
-        greenSlider.setMajorTickUnit(0.5);
-        greenSlider.setShowTickLabels(true);
+        ImageView iView = new ImageView();
 
-        blueSlider.setMax(1);
-        blueSlider.setMin(0);
-        blueSlider.setMajorTickUnit(1);
-        blueSlider.setMajorTickUnit(0.5);
-        blueSlider.setShowTickLabels(true);
-        // redSlider.setSnapToTicks(true);
+        GridPane grid = new GridPane();
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                Color pixelColor = reader.getColor(j, i);
-                double red = pixelColor.getRed();
-                redSlider.setValue(red);
-                double blue = pixelColor.getBlue();
-                blueSlider.setValue(blue);
-                double green = pixelColor.getGreen();
-                greenSlider.setValue(green);
-                double alpha = pixelColor.getOpacity();
-                Color newColor = new Color(red, green, blue, alpha);
-                writer.setColor(j, i, newColor);
-            }
-        }
-        // Slider red = new Slider();
+        grid.add(new ImageView(finalimage), 0, 0);
+        grid.add(new ImageView(finalimage), 0, width / 2);
+        // grid.add(new ImageView(finalimage), 1, 1);
+        // grid.add(new ImageView(finalimage), 1, 0);
 
-        redSlider.setOnMouseReleased(e -> {
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    Color pixelColor = reader.getColor(j, i);
-                    double red = redSlider.getValue();
-                    double blue = pixelColor.getBlue();
-                    double green = pixelColor.getGreen();
+        Pane pane = new Pane(new ImageView(finalimage));
 
-                    double alpha = pixelColor.getOpacity();
-                    Color newColor = new Color(red, green, blue, alpha);
-                    writer.setColor(j, i, newColor);
-                }
-            }
-        });
-        blueSlider.setOnMouseReleased(e -> {
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    Color pixelColor = reader.getColor(j, i);
-                    double red = pixelColor.getRed();
-
-                    double blue = blueSlider.getValue();
-                    double green = pixelColor.getGreen();
-
-                    double alpha = pixelColor.getOpacity();
-                    Color newColor = new Color(red, green, blue, alpha);
-                    writer.setColor(j, i, newColor);
-                }
-            }
-        });
-        greenSlider.setOnMouseReleased(e -> {
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    Color pixelColor = reader.getColor(j, i);
-                    double red = pixelColor.getRed();
-
-                    double blue = pixelColor.getBlue();
-
-                    double green = greenSlider.getValue();
-
-                    double alpha = pixelColor.getOpacity();
-                    Color newColor = new Color(red, green, blue, alpha);
-                    writer.setColor(j, i, newColor);
-                }
-            }
-        });
-
-        ImageView view = new ImageView(finalImage);
-        // view.setScaleX(0.5);
-        // view.setScaleY(0.5);
-
-        // // colorPicker.setOnMouseExited(e -> {
-
-        // // });
-        // painter.setStroke(Color.BLACK);
-
-        // painter.setFill(Color.BLACK);
-        // borderPane.setStyle("-fx-background-color: White");
-        // System.out.println(borderPane.getMaxHeight());
-        // double xPos = 50;
-        // double yPos = 50;
-
-        // painter.fillRect(55, 50, 10, 10);
-        // painter.fillRect(95, 50, 10, 10);
-        // painter.fillRect(45, 90, 10, 10);
-        // painter.fillRect(55, 100, 10, 10);
-        // painter.fillRect(65, 100, 10, 10);
-        // painter.fillRect(75, 100, 10, 10);
-        // painter.fillRect(85, 100, 10, 10);
-        // painter.fillRect(95, 100, 10, 10);
-        // painter.fillRect(105, 90, 10, 10);
-
-        // // canvas.setOnMouseDragged((event) -> {
-        // // double getX = event.getX();
-        // // double getY = event.getY();
-
-        // // painter.fillOval(getX, getY, 4, 4);
-        // // });
-
-        // // System.out.println(colorPicker.getValue());
-        // // borderPane.setRight(colorPicker);
-
-        Pane pane = new Pane();
-        borderPane.setCenter(pane);
-        pane.setPrefSize(640, 480);
-        pane.getChildren().add(view);
-        VBox sliderBox = new VBox();
-        sliderBox.getChildren().addAll(redSlider, greenSlider, blueSlider);
-        borderPane.setTop(sliderBox);
-
-        Scene scene = new Scene(borderPane);
+        Scene scene = new Scene(pane);
         window.setScene(scene);
         window.show();
     }
+
+    public void drawOriginImage(int height, int width, PixelReader pixelReader, PixelWriter pixelWriter) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                Color pixelColor = pixelReader.getColor(j, i);
+                double red = pixelColor.getRed();
+                double green = pixelColor.getGreen();
+                double blue = pixelColor.getBlue();
+                double opacity = pixelColor.getOpacity();
+
+                Color newColor = new Color(red, green, blue, opacity);
+
+                pixelWriter.setColor(j, i, newColor);
+
+            }
+        }
+
+    }
+
+    public void drawSmallImage(int height, int width, PixelReader pixelReader, PixelWriter pixelWriter) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                try {
+                    Color smallColor = pixelReader.getColor(j * 2, i * 2);
+                    double smallred = smallColor.getRed();
+                    double smallgreen = smallColor.getGreen();
+                    double smallblue = smallColor.getBlue();
+                    double smallopacity = smallColor.getOpacity();
+
+                    Color smallNewColor = new Color(smallred, smallgreen, smallblue, smallopacity);
+
+                    pixelWriter.setColor(j, i, smallNewColor);
+                } catch (Exception e) {
+                    continue;
+                }
+
+            }
+        }
+    }
+
 }
