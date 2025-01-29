@@ -10,6 +10,25 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
+     <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>11</version> <!-- Ensure this matches your JavaFX SDK version -->
+    </dependency>
+
+    <!-- JavaFX Controls Module -->
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>11</version>
+    </dependency>
+
+    <!-- JavaFX Media Module (for Audio and Video) -->
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-media</artifactId>
+        <version>11</version> <!-- Ensure this matches your JavaFX SDK version -->
+    </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
