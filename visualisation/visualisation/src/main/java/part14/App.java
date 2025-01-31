@@ -1,12 +1,11 @@
 package part14;
 
+import java.security.Key;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
@@ -15,41 +14,28 @@ public class App extends Application {
         launch(App.class);
     }
 
-    public void start(Stage window) {
-
+    public void start(Stage stage) {
         Pane pane = new Pane();
         pane.setPrefSize(600, 400);
-        // Circle circle = new Circle(30, 50, 10);
 
-        // pane.getChildren().add(circle);
-        Polygon poly = new Polygon(0, 50, 60, 50, 30, 0);
+        Polygon ship = new Polygon(-5, -5, 10, 0, -5, 5);
+        ship.setTranslateX(300);
+        ship.setTranslateY(200);
 
-        pane.getChildren().add(poly);
-        poly.setLayoutY(300);
+        pane.getChildren().add(ship);
+
         Scene scene = new Scene(pane);
-        window.setScene(scene);
-        window.show();
 
         scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.RIGHT) {
-                System.out.println(e);
-                double a = poly.getTranslateX();
-                poly.setTranslateX(a + 50);
-            }
             if (e.getCode() == KeyCode.LEFT) {
-                System.out.println(e);
-                double a = poly.getTranslateX();
-                poly.setTranslateX(a - 50);
+                ship.setRotate(ship.getRotate() - 5);
             }
-
+            if (e.getCode() == KeyCode.RIGHT) {
+                ship.setRotate(ship.getRotate() + 5);
+            }
         });
+        stage.setTitle("Asteroids!");
+        stage.setScene(scene);
+        stage.show();
     }
 }
-
-// 0 10 20 30 40 50
-// 0
-// 10
-// 20
-// 30
-// 40
-// 50
