@@ -29,11 +29,11 @@ public abstract class Character {
         this.characterPolygon.setTranslateY(this.characterPolygon.getTranslateY() + movement.getY());
     }
 
-    public void accelerate() {
+    public void accelerate(double velocity) {
         double changeX = Math.cos(Math.toRadians(this.characterPolygon.getRotate()));
         double changeY = Math.sin(Math.toRadians(this.characterPolygon.getRotate()));
-        changeX = changeX * 0.05;
-        changeY = changeY * 0.05;
+        changeX = changeX * velocity;
+        changeY = changeY * velocity;
         this.movement = this.movement.add(changeX, changeY);
     }
 

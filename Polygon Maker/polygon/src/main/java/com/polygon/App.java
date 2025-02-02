@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
@@ -22,7 +23,13 @@ public class App extends Application {
 
         // poly.setTranslateX(300);
         // poly.setTranslateY(200);
-        Polygon
+        // super(new Polygon(20, -20, 20, 20, -20, 20, -20, -20), x, y);
+        Polygon polygon = new Polygon(5, 5, 15, 5, 15, 7, 5, 7);
+        polygon.setTranslateX(300);
+        polygon.setTranslateY(200);
+        // polygon.setScaleX(0.5);
+        // polygon.setScaleY(0.5);
+        // polygon.setScaleZ(0.5);
 
         TextField Position = new TextField();
         // TextField yPosition = new TextField();
@@ -47,10 +54,17 @@ public class App extends Application {
 
         HBox hbox = new HBox(Position, button);
 
+        borderPane.setCenter(polygon);
+
         borderPane.setPrefSize(600, 400);
         borderPane.setTop(hbox);
 
-        Scene scene = new Scene(borderPane);
+        Pane pane = new Pane();
+        pane.setPrefSize(600, 400);
+
+        pane.getChildren().add(polygon);
+
+        Scene scene = new Scene(pane);
 
         stage.setScene(scene);
         stage.show();
