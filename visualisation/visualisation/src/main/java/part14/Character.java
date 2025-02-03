@@ -1,5 +1,7 @@
 package part14;
 
+import java.util.Random;
+
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
 
@@ -13,6 +15,7 @@ public abstract class Character {
         this.characterPolygon.setTranslateX(x);
         this.characterPolygon.setTranslateY(y);
         this.movement = new Point2D(0, 0);
+
     }
 
     public void turnLeft() {
