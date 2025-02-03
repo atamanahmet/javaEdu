@@ -16,6 +16,9 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 public class App extends Application {
+    public static int WIDTH = 600;
+    public static int HEIGHT = 400;
+
     public static void main(String[] args) {
         launch(App.class);
     }
@@ -24,13 +27,13 @@ public class App extends Application {
         Pane pane = new Pane();
         List<Asteroid> asteroidList = new ArrayList<>();
         Map<KeyCode, Boolean> controlMap = new HashMap<>();
-        pane.setPrefSize(600, 400);
+        pane.setPrefSize(WIDTH, HEIGHT);
 
         // Polygon ship = new Polygon(-5, -5, 10, 0, -5, 5);
         // ship.setTranslateX(300);
         // ship.setTranslateY(200);
 
-        Ship ship = new Ship(300, 200);
+        Ship ship = new Ship(WIDTH / 2, HEIGHT / 2);
         Random random = new Random();
 
         // double size = 10 + random.nextInt(10);
@@ -49,12 +52,8 @@ public class App extends Application {
         // size * c1, size * s1);
 
         for (int i = 0; i < 5; i++) {
-            asteroidList.add(new Asteroid(random.nextInt(300), random.nextInt(400)));
+            asteroidList.add(new Asteroid(random.nextInt(WIDTH / 3), random.nextInt(HEIGHT)));
         }
-        asteroidList.forEach(item -> {
-            item.getcharacterPolygon().setRotate(random.nextDouble() * 360);
-            item.accelerate(0.5);
-        });
 
         // Asteroid asteroid = new Asteroid(20, 20);
         // Projectile projectile = new Projectile((int)
@@ -65,6 +64,8 @@ public class App extends Application {
 
         pane.getChildren().add(ship.getcharacterPolygon());
         asteroidList.forEach(astro -> pane.getChildren().add(astro.getcharacterPolygon()));
+        // asteroidList.forEach(a ->
+        // System.out.println(a.getcharacterPolygon().getRotate()));
         // pane.getChildren().add(projectile.getcharacterPolygon());
 
         Scene scene = new Scene(pane);
@@ -75,21 +76,6 @@ public class App extends Application {
         scene.setOnKeyReleased(e -> {
             controlMap.put(e.getCode(), false);
         });
-        // asteroid.turnRight();
-        // asteroid.turnRight();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
-        // asteroid.accelerate();
 
         new AnimationTimer() {
             public void handle(long now) {

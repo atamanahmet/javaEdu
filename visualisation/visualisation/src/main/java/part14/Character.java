@@ -27,9 +27,36 @@ public abstract class Character {
     }
 
     public void move() {
+        double widthHalft = this.getcharacterPolygon().getBoundsInParent().getMaxX();
+        double heightHalft = this.getcharacterPolygon().getBoundsInParent().getMaxY();
+        this.characterPolygon.setTranslateX(this.characterPolygon.getTranslateX() + this.movement.getX());
+        this.characterPolygon.setTranslateY(this.characterPolygon.getTranslateY() + this.movement.getY());
+        if (this.characterPolygon.getTranslateX() < -widthHalft) {
+            this.characterPolygon.setTranslateX(this.characterPolygon.getTranslateX() +
+                    App.WIDTH + widthHalft);
+        }
+        if (this.characterPolygon.getTranslateX() > App.WIDTH + widthHalft) {
+            this.characterPolygon.setTranslateX(this.getcharacterPolygon().getTranslateX()
+                    % App.WIDTH + widthHalft);
+        }
 
-        this.characterPolygon.setTranslateX(this.characterPolygon.getTranslateX() + movement.getX());
-        this.characterPolygon.setTranslateY(this.characterPolygon.getTranslateY() + movement.getY());
+        if (this.characterPolygon.getTranslateY() < -heightHalft + 10) {
+            this.characterPolygon.setTranslateY(this.getcharacterPolygon().getTranslateY()
+                    + App.HEIGHT + heightHalft);
+        }
+        if (this.characterPolygon.getTranslateY() > App.HEIGHT + heightHalft) {
+            this.characterPolygon.setTranslateY(this.getcharacterPolygon().getTranslateY()
+                    % App.HEIGHT + heightHalft);
+        }
+
+    }
+
+    public void accelerate() {
+        double changeX = Math.cos(Math.toRadians(this.characterPolygon.getRotate()));
+        double changeY = Math.sin(Math.toRadians(this.characterPolygon.getRotate()));
+        changeX = changeX * 0.05;
+        changeY = changeY * 0.05;
+        this.movement = this.movement.add(changeX, changeY);
     }
 
     public void accelerate(double velocity) {
