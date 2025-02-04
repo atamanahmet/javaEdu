@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -18,6 +20,7 @@ import javafx.stage.Stage;
 public class App extends Application {
     public static int WIDTH = 600;
     public static int HEIGHT = 400;
+    int counter = 0;
 
     public static void main(String[] args) {
         launch(App.class);
@@ -26,6 +29,7 @@ public class App extends Application {
     public void start(Stage stage) {
         Pane pane = new Pane();
         List<Asteroid> asteroidList = new ArrayList<>();
+        List<Projectile> projectiles = new ArrayList<>();
         Map<KeyCode, Boolean> controlMap = new HashMap<>();
         pane.setPrefSize(WIDTH, HEIGHT);
 
@@ -34,6 +38,7 @@ public class App extends Application {
         // ship.setTranslateY(200);
 
         Ship ship = new Ship(WIDTH / 2, HEIGHT / 2);
+
         Random random = new Random();
 
         // double size = 10 + random.nextInt(10);
@@ -76,11 +81,15 @@ public class App extends Application {
         scene.setOnKeyReleased(e -> {
             controlMap.put(e.getCode(), false);
         });
+        boolean a = false;
 
         new AnimationTimer() {
             public void handle(long now) {
-                asteroidList.forEach(item -> {
-                    if (isCollide(ship.getcharacterPolygon(), item.getcharacterPolygon())) {
+
+                counter++;
+
+                asteroidList.forEach(asteroid -> {
+                    if (asteroid.isCollide(ship.getcharacterPolygon())) {
                         stop();
                     }
                 });
@@ -120,36 +129,45 @@ public class App extends Application {
                 if (controlMap.getOrDefault(KeyCode.DOWN, false)) {
                     ship.stop();
                 }
-                // if (controlMap.getOrDefault(KeyCode.SPACE, false)) {
-                // System.out.println("asd");
-                // projectile.setX(ship.getcharacterPolygon().getTranslateX() - 10);
-                // projectile.setY(ship.getcharacterPolygon().getTranslateY() - 5);
-                // projectile.getcharacterPolygon().setRotate(ship.getcharacterPolygon().getRotate());
-                // projectile.accelerate();
+                if (controlMap.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 3) {
+                    Projectile projectile = new Projectile((int) ship.getcharacterPolygon().getTranslateX(),
+                            (int) ship.getcharacterPolygon().getTranslateY());
+                    projectile.getcharacterPolygon().setRotate(ship.getcharacterPolygon().getRotate());
+                    projectile.accelerate(2);
+                    projectiles.add(projectile);
+                    pane.getChildren().add(projectile.getcharacterPolygon());
+                }
+                if (counter % 200 == 0) {
+                    projectiles.forEach(projectile -> {
+                        pane.getChildren().remove(projectile.getcharacterPolygon());
+                    });
+                    projectiles.clear();
+                }
+                if (asteroidList.isEmpty()) {
+                    System.exit(0);
+                }
 
-                // }
-                // if (controlMap.getOrDefault(KeyCode.S, false)) {
-                // ship.stop();
-                // if (isCollide(true)) {
-                // this.stop();
-                // }
-
-                // }
                 ship.move();
-                asteroidList.forEach(item -> item.move());
-                // projectile.move();
+                asteroidList.forEach(asteroid -> asteroid.move());
+
+                projectiles.forEach(projectile -> projectile.move());
+
+                projectiles.forEach(projectile -> {
+                    List<Asteroid> collidedList = asteroidList.stream()
+                            .filter(asteroid -> asteroid.isCollide(projectile.getcharacterPolygon()))
+                            .collect(Collectors.toList());
+                    collidedList.stream().forEach(collidedAsteroid -> {
+                        asteroidList.remove(collidedAsteroid);
+                        pane.getChildren().remove(collidedAsteroid.getcharacterPolygon());
+                    });
+                });
 
             }
         }.start();
-        System.out.println(ship.getcharacterPolygon().getTranslateX());
 
         stage.setTitle("Asteroids!");
         stage.setScene(scene);
         stage.show();
     }
 
-    public boolean isCollide(Polygon object1, Polygon object2) {
-        Shape collision = Shape.intersect(object1, object2);
-        return collision.getBoundsInLocal().getWidth() != -1;
-    }
 }

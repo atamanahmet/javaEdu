@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 
 public abstract class Character {
 
@@ -31,22 +32,20 @@ public abstract class Character {
         double heightHalft = this.getcharacterPolygon().getBoundsInParent().getMaxY();
         this.characterPolygon.setTranslateX(this.characterPolygon.getTranslateX() + this.movement.getX());
         this.characterPolygon.setTranslateY(this.characterPolygon.getTranslateY() + this.movement.getY());
-        if (this.characterPolygon.getTranslateX() < -widthHalft) {
+        if (this.characterPolygon.getTranslateX() < 0) {
             this.characterPolygon.setTranslateX(this.characterPolygon.getTranslateX() +
-                    App.WIDTH + widthHalft);
+                    App.WIDTH);
         }
-        if (this.characterPolygon.getTranslateX() > App.WIDTH + widthHalft) {
-            this.characterPolygon.setTranslateX(this.getcharacterPolygon().getTranslateX()
-                    % App.WIDTH + widthHalft);
+        if (this.characterPolygon.getTranslateX() > App.WIDTH) {
+            this.characterPolygon.setTranslateX(0);
         }
 
-        if (this.characterPolygon.getTranslateY() < -heightHalft + 10) {
+        if (this.characterPolygon.getTranslateY() < 0) {
             this.characterPolygon.setTranslateY(this.getcharacterPolygon().getTranslateY()
-                    + App.HEIGHT + heightHalft);
+                    + App.HEIGHT);
         }
-        if (this.characterPolygon.getTranslateY() > App.HEIGHT + heightHalft) {
-            this.characterPolygon.setTranslateY(this.getcharacterPolygon().getTranslateY()
-                    % App.HEIGHT + heightHalft);
+        if (this.characterPolygon.getTranslateY() > App.HEIGHT) {
+            this.characterPolygon.setTranslateY(0);
         }
 
     }
@@ -89,6 +88,11 @@ public abstract class Character {
 
     public void stop() {
         this.movement = new Point2D(0, 0);
+    }
+
+    public boolean isCollide(Polygon object2) {
+        Shape collision = Shape.intersect(this.characterPolygon, object2);
+        return collision.getBoundsInLocal().getWidth() != -1;
     }
 
 }
