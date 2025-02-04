@@ -11,7 +11,10 @@ import java.util.stream.Collectors;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
@@ -21,59 +24,35 @@ public class App extends Application {
     public static int WIDTH = 600;
     public static int HEIGHT = 400;
     int counter = 0;
+    int score = 0;
 
     public static void main(String[] args) {
         launch(App.class);
     }
 
     public void start(Stage stage) {
+        BorderPane borderPane = new BorderPane();
+
+        HBox topBar = new HBox();
+        Label points = new Label("Points: " + score);
+        topBar.getChildren().add(points);
+
         Pane pane = new Pane();
         List<Asteroid> asteroidList = new ArrayList<>();
         List<Projectile> projectiles = new ArrayList<>();
         Map<KeyCode, Boolean> controlMap = new HashMap<>();
         pane.setPrefSize(WIDTH, HEIGHT);
 
-        // Polygon ship = new Polygon(-5, -5, 10, 0, -5, 5);
-        // ship.setTranslateX(300);
-        // ship.setTranslateY(200);
-
         Ship ship = new Ship(WIDTH / 2, HEIGHT / 2);
 
-        Random random = new Random();
-
-        // double size = 10 + random.nextInt(10);
-
-        // Polygon polygon = new Polygon();
-        // double c1 = Math.cos(Math.PI * 2 / 5);
-        // double c2 = Math.cos(Math.PI / 5);
-        // double s1 = Math.sin(Math.PI * 2 / 5);
-        // double s2 = Math.sin(Math.PI * 4 / 5);
-
-        // polygon.getPoints().addAll(
-        // size, 0.0,
-        // size * c1, -1 * size * s1,
-        // -1 * size * c2, -1 * size * s2,
-        // -1 * size * c2, size * s2,
-        // size * c1, size * s1);
-
-        for (int i = 0; i < 5; i++) {
-            asteroidList.add(new Asteroid(random.nextInt(WIDTH / 3), random.nextInt(HEIGHT)));
-        }
-
-        // Asteroid asteroid = new Asteroid(20, 20);
-        // Projectile projectile = new Projectile((int)
-        // ship.getcharacterPolygon().getTranslateX() - 10,(int)
-        // ship.getcharacterPolygon().getTranslateY() - 5);
-
-        // pane.getChildren().add(asteroid.getcharacterPolygon());
-
         pane.getChildren().add(ship.getcharacterPolygon());
-        asteroidList.forEach(astro -> pane.getChildren().add(astro.getcharacterPolygon()));
-        // asteroidList.forEach(a ->
-        // System.out.println(a.getcharacterPolygon().getRotate()));
-        // pane.getChildren().add(projectile.getcharacterPolygon());
 
-        Scene scene = new Scene(pane);
+        createNewAsteroidSet(asteroidList, pane, 5);
+
+        borderPane.setTop(topBar);
+        borderPane.setCenter(pane);
+
+        Scene scene = new Scene(borderPane);
 
         scene.setOnKeyPressed(e -> {
             controlMap.put(e.getCode(), true);
@@ -81,7 +60,6 @@ public class App extends Application {
         scene.setOnKeyReleased(e -> {
             controlMap.put(e.getCode(), false);
         });
-        boolean a = false;
 
         new AnimationTimer() {
             public void handle(long now) {
@@ -130,11 +108,14 @@ public class App extends Application {
                     ship.stop();
                 }
                 if (controlMap.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 3) {
+
                     Projectile projectile = new Projectile((int) ship.getcharacterPolygon().getTranslateX(),
                             (int) ship.getcharacterPolygon().getTranslateY());
+
                     projectile.getcharacterPolygon().setRotate(ship.getcharacterPolygon().getRotate());
                     projectile.accelerate(2);
                     projectiles.add(projectile);
+
                     pane.getChildren().add(projectile.getcharacterPolygon());
                 }
                 if (counter % 200 == 0) {
@@ -144,7 +125,8 @@ public class App extends Application {
                     projectiles.clear();
                 }
                 if (asteroidList.isEmpty()) {
-                    System.exit(0);
+                    createNewAsteroidSet(asteroidList, pane, 5);
+
                 }
 
                 ship.move();
@@ -153,10 +135,15 @@ public class App extends Application {
                 projectiles.forEach(projectile -> projectile.move());
 
                 projectiles.forEach(projectile -> {
-                    List<Asteroid> collidedList = asteroidList.stream()
+
+                    List<Asteroid> collidedList = asteroidList
+                            .stream()
                             .filter(asteroid -> asteroid.isCollide(projectile.getcharacterPolygon()))
                             .collect(Collectors.toList());
+
                     collidedList.stream().forEach(collidedAsteroid -> {
+                        score += 100;
+                        points.setText("Points: " + score);
                         asteroidList.remove(collidedAsteroid);
                         pane.getChildren().remove(collidedAsteroid.getcharacterPolygon());
                     });
@@ -168,6 +155,21 @@ public class App extends Application {
         stage.setTitle("Asteroids!");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void createNewAsteroidSet(List<Asteroid> asteroidList, Pane pane, int howMany) {
+
+        if (asteroidList.isEmpty()) {
+
+            Random random = new Random();
+
+            for (int i = 0; i < howMany; i++) {
+
+                asteroidList.add(new Asteroid(random.nextInt(WIDTH / 3), random.nextInt(HEIGHT)));
+            }
+
+            asteroidList.forEach(astro -> pane.getChildren().add(astro.getcharacterPolygon()));
+        }
     }
 
 }
