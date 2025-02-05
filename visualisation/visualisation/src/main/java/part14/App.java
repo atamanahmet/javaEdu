@@ -126,13 +126,11 @@ public class App extends Application {
                 }
                 if (asteroidList.isEmpty()) {
                     createNewAsteroidSet(asteroidList, pane, 5);
-
                 }
 
                 ship.move();
-                asteroidList.forEach(asteroid -> asteroid.move());
-
-                projectiles.forEach(projectile -> projectile.move());
+                forEachMove(asteroidList);
+                forEachMove(projectiles);
 
                 projectiles.forEach(projectile -> {
 
@@ -170,6 +168,11 @@ public class App extends Application {
 
             asteroidList.forEach(astro -> pane.getChildren().add(astro.getcharacterPolygon()));
         }
+    }
+
+    public <T extends Character> void forEachMove(List<T> list) {
+        list.forEach(item -> item.move());
+
     }
 
 }
