@@ -132,21 +132,7 @@ public class App extends Application {
                 forEachMove(asteroidList);
                 forEachMove(projectiles);
 
-                projectiles.forEach(projectile -> {
-
-                    List<Asteroid> collidedList = asteroidList
-                            .stream()
-                            .filter(asteroid -> asteroid.isCollide(projectile.getcharacterPolygon()))
-                            .collect(Collectors.toList());
-
-                    collidedList.stream().forEach(collidedAsteroid -> {
-                        score += 100;
-                        points.setText("Points: " + score);
-                        asteroidList.remove(collidedAsteroid);
-                        pane.getChildren().remove(collidedAsteroid.getcharacterPolygon());
-                    });
-                });
-
+                removeCollided(asteroidList, projectiles, points, pane);
             }
         }.start();
 
@@ -173,6 +159,23 @@ public class App extends Application {
     public <T extends Character> void forEachMove(List<T> list) {
         list.forEach(item -> item.move());
 
+    }
+
+    public void removeCollided(List<Asteroid> asteroidList, List<Projectile> projectiles, Label points, Pane pane) {
+        projectiles.forEach(projectile -> {
+
+            List<Asteroid> collidedList = asteroidList
+                    .stream()
+                    .filter(asteroid -> asteroid.isCollide(projectile.getcharacterPolygon()))
+                    .collect(Collectors.toList());
+
+            collidedList.stream().forEach(collidedAsteroid -> {
+                score += 100;
+                points.setText("Points: " + score);
+                asteroidList.remove(collidedAsteroid);
+                pane.getChildren().remove(collidedAsteroid.getcharacterPolygon());
+            });
+        });
     }
 
 }
