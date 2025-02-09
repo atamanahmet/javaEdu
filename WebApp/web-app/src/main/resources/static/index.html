@@ -4,24 +4,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      table,
+      td {
+        border: 1px solid black;
+      }
+      th {
+        background-color: rgb(54, 59, 80);
+        color: white;
+        text-align: start;
+        height: 30px;
+      }
+      td {
+        width: 200px;
+        height: 30px;
+      }
+      .button {
+        text-align: center;
+      }
+      button {
+        width: 95%;
+        background-color: rgb(0, 161, 0);
+        color: white;
+        border: none;
+        padding: 5px;
+        border-radius: 2px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
       <table>
         <tr>
-          <td>Student</td>
-          <td>Subject</td>
-          <td>Mark</td>
+          <th>Student</th>
+          <th>Subject</th>
+          <th>Mark</th>
+          <th></th>
         </tr>
         <tr>
           <td>Harry</td>
           <td>Harry</td>
           <td>Harry</td>
+          <td class="button"><button>Update</button></td>
         </tr>
         <tr>
           <td>Harry</td>
           <td>Harry</td>
           <td>Harry</td>
+          <td class="button"><button>Update</button></td>
+        </tr>
+        <tr>
+          <td>Harry</td>
+          <td>Harry</td>
+          <td>Harry</td>
+          <td class="button"><button>Update</button></td>
         </tr>
       </table>
     </div>
