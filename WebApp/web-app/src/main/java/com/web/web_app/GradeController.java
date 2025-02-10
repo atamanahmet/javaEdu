@@ -25,4 +25,9 @@ public class GradeController {
         return "grades";
     }
 
+    @GetMapping("/form")
+    public String getForm(Model model) {
+        return "form";
+    }
+
 }
