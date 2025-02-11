@@ -33,13 +33,21 @@
           <td th:text="${grade.score}"></td>
           <td th:text="${grade.id}"></td>
 
+          <td>
+            <a role="button" class="update" th:href="@{/(id=${grade.id})}"
+              >Update</a
+            >
+          </td>
+          <!-- <td>
+            <form th:action="@{/?'id={id}(id=${grade.id})}">
+            <button type="submit" class="update"
+              >Update</a
+            >
+          </form>
+          </td> -->
+
           <!-- The "Update" link includes the grade's ID in the URL,
                so the form page knows which record is being edited. -->
-          <!-- <td>
-            <a role="button" class="update" th:href="@{/(id=${grade.id})}">
-              Update
-            </a>
-          </td> -->
         </tr>
       </table>
     </div>

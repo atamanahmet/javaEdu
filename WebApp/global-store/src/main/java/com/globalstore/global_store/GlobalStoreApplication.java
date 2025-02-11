@@ -1,17 +1,13 @@
-package com.web.web_app;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.globalstore.global_store;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WebApp {
+public class GlobalStoreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WebApp.class, args);
-
+		SpringApplication.run(GlobalStoreApplication.class, args);
 	}
 
 }

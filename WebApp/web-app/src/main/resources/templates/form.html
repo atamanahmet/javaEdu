@@ -21,7 +21,12 @@
              The backend will receive any changes as a Grade object. -->
         <input type="text" placeholder="Name" th:field="*{name}" />
         <input type="text" placeholder="Score" th:field="*{score}" />
-        <input type="text" placeholder="Subject" th:field="*{subject}" />
+        <input
+          type="text"
+          placeholder="Subject"
+          th:utext="*{subject}"
+          th:field="*{subject}"
+        />
 
         <!-- "id" is hidden but still crucial for identifying whether this
              is a new grade or an existing one. -->
