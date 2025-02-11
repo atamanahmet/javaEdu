@@ -22,13 +22,16 @@ public class GradeController {
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(required = false) String id) {
-        studentGrades = new ArrayList<>();
-        populateGrades();
+        if (studentGrades.isEmpty()) {
+            populateGrades();
+
+        }
+        // studentGrades = new ArrayList<>();
         isFirstStart = false;
 
         int index = getIndex(id);
         Grade grade = (index == Constants.NOT_FOUND) ? new Grade() : studentGrades.get(index);
-        model.addAttribute(grade);
+        model.addAttribute("grade", grade);
         return "form";
     }
 
@@ -42,14 +45,22 @@ public class GradeController {
 
     @PostMapping("/handleSubmit")
     public String submitGrades(Grade grade) {
-        Grade newGrade = new Grade(grade.getName(), grade.getSubject(), grade.getScore());
-        newGrade.setId(grade.getId());
-        studentGrades.add(newGrade);
+        boolean isExist = false;
+        for (Grade existingGrade : studentGrades) {
+            if (existingGrade.getId().equals(grade.getId())) {
+                existingGrade.setName(grade.getName());
+                existingGrade.setSubject(grade.getSubject());
+                existingGrade.setScore(grade.getScore());
+                isExist = true;
+            }
+
+        }
+        if (!isExist) {
+            studentGrades.add(grade);
+        }
 
         updateGradesWithId();
-        grade.setName(null);
-        grade.setSubject(null);
-        grade.setScore(null);
+
         return "form";
     }
 
@@ -65,6 +76,7 @@ public class GradeController {
 
     public void populateGrades() {
         String dataFileName;
+
         try {
             if (isFirstStart) {
                 dataFileName = "data.csv";
@@ -79,11 +91,13 @@ public class GradeController {
                 lines.add(line);
             }
             for (String string : lines) {
-                String name = string.split(",")[0];
-                String subject = string.split(",")[1];
-                String score = string.split(",")[2];
+                String[] datas = string.split(",");
+                String name = datas[0];
+                String subject = datas[1];
+                String score = datas[2];
+                String id = datas[3];
 
-                studentGrades.add(new Grade(name, subject, score));
+                studentGrades.add(new Grade(name, subject, score, id));
 
             }
 

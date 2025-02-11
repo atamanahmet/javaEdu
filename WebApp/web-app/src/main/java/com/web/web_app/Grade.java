@@ -8,11 +8,11 @@ public class Grade {
     private String score;
     private String id;
 
-    public Grade(String name, String subject, String score) {
+    public Grade(String name, String subject, String score, String id) {
         this.name = name;
         this.subject = subject;
         this.score = score;
-        this.id = UUID.randomUUID().toString();
+        this.id = id;
     }
 
     public Grade() {
