@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class GradeController {
 
     List<Grade> studentGrades = new ArrayList<>();
+    public boolean isFirstStart = true;
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(required = false) String id) {
         studentGrades = new ArrayList<>();
         populateGrades();
+        isFirstStart = false;
+
         int index = getIndex(id);
         Grade grade = (index == Constants.NOT_FOUND) ? new Grade() : studentGrades.get(index);
         model.addAttribute(grade);
@@ -37,6 +40,19 @@ public class GradeController {
         return "grades";
     }
 
+    @PostMapping("/handleSubmit")
+    public String submitGrades(Grade grade) {
+        Grade newGrade = new Grade(grade.getName(), grade.getSubject(), grade.getScore());
+        newGrade.setId(grade.getId());
+        studentGrades.add(newGrade);
+
+        updateGradesWithId();
+        grade.setName(null);
+        grade.setSubject(null);
+        grade.setScore(null);
+        return "form";
+    }
+
     public int getIndex(String id) {
         for (int i = 0; i < studentGrades.size(); i++) {
             if (studentGrades.get(i).getId().equals(id)) {
@@ -48,37 +64,32 @@ public class GradeController {
     }
 
     public void populateGrades() {
+        String dataFileName;
         try {
-            BufferedReader buffRead = new BufferedReader(new FileReader("data.csv"));
+            if (isFirstStart) {
+                dataFileName = "data.csv";
+
+            } else {
+                dataFileName = "data.txt";
+            }
+            BufferedReader buffRead = new BufferedReader(new FileReader(dataFileName));
             List<String> lines = new ArrayList<>();
             String line;
             while ((line = buffRead.readLine()) != null) {
                 lines.add(line);
             }
-            List<Grade> bufferGrades = new ArrayList<>(studentGrades);
             for (String string : lines) {
                 String name = string.split(",")[0];
                 String subject = string.split(",")[1];
                 String score = string.split(",")[2];
-                // System.out.println(name + subject + score);
-                // if (!bufferGrades.isEmpty()) {
-                // for (Grade grade : bufferGrades) {
 
-                // }
-                // } else {
                 studentGrades.add(new Grade(name, subject, score));
 
-                // }
-
             }
-            // for (Grade grade : studentGrades) {
-            // System.out.println(grade.getName() + grade.getSubject() + grade.getScore());
 
-            // }
             buffRead.close();
             updateGradesWithId();
         } catch (Exception e) {
-            // System.out.println("error");
             System.out.println(e.getMessage());
         }
     }
