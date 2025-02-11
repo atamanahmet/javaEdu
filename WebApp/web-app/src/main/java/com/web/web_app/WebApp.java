@@ -11,7 +11,8 @@ public class WebApp {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WebApp.class, args);
-
+		GradeController controller = new GradeController();
+		controller.populateGrades();
 	}
 
 }
