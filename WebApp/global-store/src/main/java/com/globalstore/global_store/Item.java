@@ -1,13 +1,17 @@
 package com.globalstore.global_store;
 
+import java.util.Date;
 import java.util.UUID;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class Item {
     private String name;
-    private String discount;
+    private int discount;
     private String category;
-    private String price;
-    private String date;
+    private int price;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date date;
     private String id;
 
     public Item() {
@@ -31,11 +35,11 @@ public class Item {
         this.name = name;
     }
 
-    public String getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(String discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 
@@ -47,19 +51,19 @@ public class Item {
         this.category = category;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
