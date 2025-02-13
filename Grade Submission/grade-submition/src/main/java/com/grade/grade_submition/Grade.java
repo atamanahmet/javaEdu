@@ -1,13 +1,7 @@
 package com.grade.grade_submition;
 
 import java.util.UUID;
-
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 public class Grade {
     @NotBlank(message = "Name field can not be blank")
@@ -19,8 +13,11 @@ public class Grade {
 
     @NotBlank(message = "Score field can not be blank")
     // @Max(3)
-    @Pattern(regexp = "[ABCD][+-]|[F]")
+    // @Pattern(regexp = "[ABCD][+-]|[F]")
+
+    @Validation(message = "Wrong grade type. Must be letter")
     private String score;
+
     private String id;
 
     public Grade() {

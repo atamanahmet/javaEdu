@@ -46,8 +46,10 @@ public class GradeController {
         }
         String status;
         int index = ifExistGetIndex(grade.getId());
+        grade.setScore(grade.getScore().toUpperCase());
 
         if (index == Constants.NOT_FOUND) {
+
             gradeList.add(grade);
             status = Constants.success;
         } else {
