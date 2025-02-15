@@ -6,11 +6,14 @@ import java.util.UUID;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class User {
+    // @FieldsCheckValidation
     private String firstName;
+    // @FieldsCheckValidation
     private String lastName;
     private String userName;
     private String email;
 
+    @FieldsCheckValidation(message = "Must be over 18")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
     private String id;
