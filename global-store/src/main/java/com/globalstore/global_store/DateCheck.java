@@ -8,12 +8,11 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-@Constraint(validatedBy = Validator.class)
-public @interface PriceValidation {
-
-    String message() default "Please enter correct info";
+@Constraint(validatedBy = DateValidatorMethod.class)
+public @interface DateCheck {
+    String message() default "Date error. Cannot get error message";
 
     Class<?>[] groups() default {};
 

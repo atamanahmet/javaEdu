@@ -1,17 +1,14 @@
 package com.globalstore.global_store;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
-
-import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import jakarta.validation.Constraint;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 
+@PriceFieldCheck
+@DateCheck
 public class Item {
     @NotBlank(message = "Name cannot be blank.")
     private String name;
@@ -26,11 +23,12 @@ public class Item {
     private Double discount;
 
     @Min(value = 0, message = "Price can not be negative")
-    ₺
+    // @PriceValidation(message = "Price cannot be less than discount")
     private Double price;
 
     @NotBlank(message = "Please choose a category.")
     private String category;
+
     private String id;
 
     public Item() {

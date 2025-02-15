@@ -1,21 +1,16 @@
 package com.globalstore.global_store;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class StoreController {
@@ -33,7 +28,8 @@ public class StoreController {
     }
 
     @PostMapping("/submitItem")
-    public String handleSubmit(@Valid Item item, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String handleSubmit(@Valid Item item, BindingResult result, RedirectAttributes redirectAttributes,
+            HttpSession session) {
         if (result.hasErrors()) {
             return "form";
         }
@@ -42,11 +38,13 @@ public class StoreController {
         if (index == Constants.NOT_FOUND) {
             itemList.add(item);
         } else {
-            if (isItWithinFiveDays(item, itemList.get(index))) {
-                itemList.set(index, item);
-            } else {
-                status = Constants.FAILED;
-            }
+            session.setAttribute("oldDate", itemList.get(index).getDate());
+            itemList.set(index, item);
+            // if (isItWithinFiveDays(item, itemList.get(index))) {
+            // itemList.set(index, item);
+            // } else {
+            // status = Constants.FAILED;
+            // }
         }
 
         redirectAttributes.addFlashAttribute("status", status);
@@ -68,20 +66,21 @@ public class StoreController {
         return Constants.NOT_FOUND;
     }
 
-    public boolean isItWithinFiveDays(Item oldItem, Item newItem) {
-        long difference = Math.abs(oldItem.getDate().getTime() - newItem.getDate().getTime());
-        System.out.println(TimeUnit.MILLISECONDS.toDays(difference));
-        if ((int) TimeUnit.MILLISECONDS.toDays(difference) > 5) {
-            return false;
-        }
-        return true;
-    }
+    // public boolean isItWithinFiveDays(Item oldItem, Item newItem) {
+    // long difference = Math.abs(oldItem.getDate().getTime() -
+    // newItem.getDate().getTime());
+    // System.out.println(TimeUnit.MILLISECONDS.toDays(difference));
+    // if ((int) TimeUnit.MILLISECONDS.toDays(difference) > 5) {
+    // return false;
+    // }
+    // return true;
+    // }
 
-    public boolean isPriceValid(Item item) {
-        if (item.getPrice() < item.getDiscount()) {
-            return false;
-        }
-        return true;
-    }
+    // public boolean isPriceValid(Item item) {
+    // if (item.getPrice() < item.getDiscount()) {
+    // return false;
+    // }
+    // return true;
+    // }
 
 }
