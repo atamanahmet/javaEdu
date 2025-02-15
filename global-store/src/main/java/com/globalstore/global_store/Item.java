@@ -2,18 +2,17 @@ package com.globalstore.global_store;
 
 import java.util.Date;
 import java.util.UUID;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 
 @PriceFieldCheck
-@DateCheck
+// @DateCheck
 public class Item {
     @NotBlank(message = "Name cannot be blank.")
     private String name;
-
-    // @PriceValidation(message = "Price can not be lower than discount")
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "Date must be in the past")
@@ -22,14 +21,16 @@ public class Item {
     @Min(value = 0, message = "Discount can not be negative")
     private Double discount;
 
-    @Min(value = 0, message = "Price can not be negative")
-    // @PriceValidation(message = "Price cannot be less than discount")
+    @Min(value = 1, message = "Price can not be negative")
     private Double price;
 
     @NotBlank(message = "Please choose a category.")
     private String category;
 
     private String id;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date oldDate;
 
     public Item() {
         this.id = UUID.randomUUID().toString();
@@ -81,5 +82,13 @@ public class Item {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getOldDate() {
+        return this.oldDate;
+    }
+
+    public void setOldDate(Date oldDate) {
+        this.oldDate = oldDate;
     }
 }
