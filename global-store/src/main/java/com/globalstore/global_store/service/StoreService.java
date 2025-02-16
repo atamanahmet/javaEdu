@@ -1,11 +1,13 @@
 package com.globalstore.global_store.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.globalstore.global_store.Constants;
 import com.globalstore.global_store.Item;
 import com.globalstore.global_store.repository.StoreRepository;
 
@@ -28,22 +30,52 @@ public class StoreService {
     }
 
     public int getItemIndex(String id) {
-        return storeRepo.getItemIndex(id);
+        List<Item> itemList = new ArrayList<>(getItemList());
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return Constants.NOT_FOUND;
+    }
+
+    public String submitItem(Item item) {
+        int index = getItemIndex(item.getId());
+        if (index == Constants.NOT_FOUND) {
+            storeRepo.putOldDate(item.getId(), item.getDate());
+            storeRepo.addItem(item);
+        } else {
+            storeRepo.putOldDate(item.getId(), item.getDate());
+            storeRepo.updateItem(item, index);
+        }
+        return Constants.SUCCESS;
     }
 
     public Item getItem(String id) {
-        return storeRepo.getItem(id);
+        int index = getItemIndex(id);
+        if (index == Constants.NOT_FOUND) {
+            return new Item();
+        } else {
+            return storeRepo.getItem(index);
+        }
     }
 
     public List<Item> getItemList() {
         return storeRepo.getItemList();
     }
 
-    public String addOrUpdateItem(Item item) {
-        return storeRepo.addOrUpdateItem(item);
+    public String updateItem(Item item, int index) {
+        storeRepo.updateItem(item, index);
+        return Constants.SUCCESS;
     }
 
-    public Map<String, Date> getOldDateMap() {
-        return storeRepo.getOldDateMap();
+    public String addItem(Item item) {
+        storeRepo.addItem(item);
+        return Constants.SUCCESS;
+
+    }
+
+    public Date getOldDate(String id) {
+        return storeRepo.getOldDateMap().get(id);
     }
 }

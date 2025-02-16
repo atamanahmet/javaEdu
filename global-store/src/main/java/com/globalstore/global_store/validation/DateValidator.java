@@ -30,7 +30,7 @@ public class DateValidator implements ConstraintValidator<DateCheck, Item> {
             return true;
 
         } else {
-            Date oldDate = storeService.getOldDateMap().get(item.getId());
+            Date oldDate = storeService.getOldDate(item.getId());
 
             if (oldDate == null) {
                 System.out.println("oldDate: null");

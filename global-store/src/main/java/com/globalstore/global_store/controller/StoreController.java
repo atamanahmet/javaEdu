@@ -29,7 +29,7 @@ public class StoreController {
             return "form";
         }
 
-        redirectAttributes.addFlashAttribute("status", storeService.addOrUpdateItem(item));
+        redirectAttributes.addFlashAttribute("status", storeService.submitItem(item));
         return "redirect:/inventory";
     }
 
