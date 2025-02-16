@@ -3,7 +3,6 @@ package com.globalstore.global_store.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -13,24 +12,25 @@ import com.globalstore.global_store.repository.StoreRepository;
 
 @Service
 public class StoreService {
+
     private static StoreRepository storeRepo;
     private static StoreService instance;
 
     public StoreService() {
-
     }
 
     public static StoreService getInstance() {
+
         if (instance == null) {
             instance = new StoreService();
             storeRepo = new StoreRepository();
         }
         return instance;
-
     }
 
     public int getItemIndex(String id) {
         List<Item> itemList = new ArrayList<>(getItemList());
+
         for (int i = 0; i < itemList.size(); i++) {
             if (itemList.get(i).getId().equals(id)) {
                 return i;
@@ -40,7 +40,9 @@ public class StoreService {
     }
 
     public String submitItem(Item item) {
+
         int index = getItemIndex(item.getId());
+
         if (index == Constants.NOT_FOUND) {
             storeRepo.putOldDate(item.getId(), item.getDate());
             storeRepo.addItem(item);
@@ -52,6 +54,7 @@ public class StoreService {
     }
 
     public Item getItem(String id) {
+
         int index = getItemIndex(id);
         if (index == Constants.NOT_FOUND) {
             return new Item();
@@ -61,21 +64,25 @@ public class StoreService {
     }
 
     public List<Item> getItemList() {
+
         return storeRepo.getItemList();
     }
 
     public String updateItem(Item item, int index) {
+
         storeRepo.updateItem(item, index);
         return Constants.SUCCESS;
     }
 
     public String addItem(Item item) {
+
         storeRepo.addItem(item);
         return Constants.SUCCESS;
 
     }
 
     public Date getOldDate(String id) {
+
         return storeRepo.getOldDateMap().get(id);
     }
 }

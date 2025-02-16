@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ public class DateValidator implements ConstraintValidator<DateCheck, Item> {
             }
             LocalDate localdate = LocalDate.ofInstant(oldDate.toInstant(), ZoneId.systemDefault());
 
-            if (Math.abs(TimeUnit.MILLISECONDS.toDays(item.getDate().getTime() -
-                    oldDate.getTime())) > 5) {
+            if (Math.abs(TimeUnit.MILLISECONDS.toDays(item.getDate().getTime() - oldDate.getTime())) > 5) {
+
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(
                         "Date must be within 5 days from "
