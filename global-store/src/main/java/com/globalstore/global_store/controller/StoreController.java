@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class StoreController {
-    private StoreService storeService = new StoreService();
+    private StoreService storeService = StoreService.getInstance();
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(required = false, value = "id") String id) {
@@ -28,6 +28,7 @@ public class StoreController {
         if (result.hasErrors()) {
             return "form";
         }
+
         redirectAttributes.addFlashAttribute("status", storeService.addOrUpdateItem(item));
         return "redirect:/inventory";
     }

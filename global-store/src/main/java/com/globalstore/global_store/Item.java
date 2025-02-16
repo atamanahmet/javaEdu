@@ -5,9 +5,15 @@ import java.util.UUID;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.globalstore.global_store.validation.DateCheck;
+import com.globalstore.global_store.validation.PriceCheck;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 
+@PriceCheck
+@DateCheck
 public class Item {
     @NotBlank(message = "Name cannot be empty")
     private String name;
@@ -15,11 +21,12 @@ public class Item {
     private String category;
 
     @Min(0)
-    private double price;
+    private int price;
 
     @Min(0)
-    private double discount;
+    private int discount;
 
+    @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
@@ -45,19 +52,19 @@ public class Item {
         this.category = category;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public double getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 
