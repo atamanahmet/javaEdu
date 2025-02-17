@@ -1,5 +1,6 @@
 package com.grade.grade_submition.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class GradeController {
 
-    private GradeService gradeService = new GradeService();
+    @Autowired
+    private GradeService gradeService;
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(value = "id", required = false) String id) {
@@ -39,7 +41,7 @@ public class GradeController {
             return "form.html";
         }
 
-        redirectAttributes.addFlashAttribute("status", gradeService.updateGrade(grade));
+        redirectAttributes.addFlashAttribute("status", gradeService.submitGrade(grade));
 
         return "redirect:/grades";
     }

@@ -1,22 +1,59 @@
 package com.grade.grade_submition.service;
 
 import java.util.List;
+
+import com.grade.grade_submition.Constants;
 import com.grade.grade_submition.Grade;
 import com.grade.grade_submition.repository.GradeRepository;
 
-public class GradeService {
-    private GradeRepository gradeRepository = new GradeRepository();
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-    public Grade getGrade(String id) {
-        return gradeRepository.getGrade(id);
-    }
+@Service
+public class GradeService {
+
+    @Autowired
+    private GradeRepository gradeRepository;
 
     public List<Grade> getGradeList() {
         return gradeRepository.getGradeList();
     }
 
-    public String updateGrade(Grade grade) {
-        return gradeRepository.updateGrade(grade);
+    public String updateGrade(int index, Grade grade) {
+        gradeRepository.updateGrade(index, grade);
+        return Constants.SUCCESS;
 
+    }
+
+    public String addGrade(Grade grade) {
+        gradeRepository.addGrade(grade);
+        return Constants.SUCCESS;
+    }
+
+    public int ifExistGetIndex(String id) {
+        List<Grade> gradeList = gradeRepository.getGradeList();
+        for (int i = 0; i < gradeList.size(); i++) {
+            if (gradeList.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return Constants.NOT_FOUND;
+    }
+
+    public Grade getGrade(String id) {
+        int index = ifExistGetIndex(id);
+
+        return (index == Constants.NOT_FOUND) ? new Grade() : gradeRepository.getGrade(index);
+    }
+
+    public String submitGrade(Grade grade) {
+        int index = ifExistGetIndex(grade.getId());
+        if (index == Constants.NOT_FOUND) {
+            addGrade(grade);
+        } else {
+            updateGrade(index, grade);
+        }
+
+        return Constants.SUCCESS;
     }
 }
