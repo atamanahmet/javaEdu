@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Repository;
+
 import com.globalstore.global_store.Item;
 
+@Repository
 public class StoreRepository {
     private List<Item> itemList = new ArrayList<>();
     private Map<String, Date> oldDates = new HashMap<>();

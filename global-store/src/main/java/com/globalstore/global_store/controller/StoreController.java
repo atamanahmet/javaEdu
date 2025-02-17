@@ -1,5 +1,6 @@
 package com.globalstore.global_store.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class StoreController {
-    private StoreService storeService = StoreService.getInstance();
+
+    @Autowired
+    private StoreService storeService;
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(required = false, value = "id") String id) {
@@ -25,9 +28,8 @@ public class StoreController {
     @PostMapping("/submitItem")
     public String handleSubmit(@Valid Item item, BindingResult result, RedirectAttributes redirectAttributes) {
 
-        if (result.hasErrors()) {
+        if (result.hasErrors())
             return "form";
-        }
 
         redirectAttributes.addFlashAttribute("status", storeService.submitItem(item));
         return "redirect:/inventory";

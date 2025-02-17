@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.globalstore.global_store.Constants;
@@ -13,20 +14,20 @@ import com.globalstore.global_store.repository.StoreRepository;
 @Service
 public class StoreService {
 
-    private static StoreRepository storeRepo;
-    private static StoreService instance;
+    @Autowired
+    private StoreRepository storeRepo;
 
     public StoreService() {
     }
 
-    public static StoreService getInstance() {
+    // public static StoreService getInstance() {
 
-        if (instance == null) {
-            instance = new StoreService();
-            storeRepo = new StoreRepository();
-        }
-        return instance;
-    }
+    // if (instance == null) {
+    // instance = new StoreService();
+    // storeRepo = new StoreRepository();
+    // }
+    // return instance;
+    // }
 
     public int getItemIndex(String id) {
         List<Item> itemList = new ArrayList<>(getItemList());
