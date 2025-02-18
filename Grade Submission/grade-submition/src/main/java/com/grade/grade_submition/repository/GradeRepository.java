@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GradeRepository {
 
-    private List<Grade> gradeList = new ArrayList<>();
+    private List<Grade> gradeList;
 
     public GradeRepository() {
-
+        this.gradeList = new ArrayList<>();
     }
 
     public List<Grade> getGradeList() {

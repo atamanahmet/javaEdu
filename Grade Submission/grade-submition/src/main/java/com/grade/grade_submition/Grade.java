@@ -8,12 +8,9 @@ public class Grade {
     private String name;
 
     @NotBlank(message = "Subject field can not be blank")
-    // @Min(4)
     private String subject;
 
     @NotBlank(message = "Score field can not be blank")
-    // @Max(3)
-    // @Pattern(regexp = "[ABCD][+-]|[F]")
 
     @Validation(message = "Wrong grade type. Must be letter")
     private String score;
@@ -28,6 +25,10 @@ public class Grade {
         this.name = name;
         this.subject = subject;
         this.score = score;
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+
+        }
     }
 
     public String getName() {
