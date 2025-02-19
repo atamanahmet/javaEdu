@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.grade.grade_submition.repository.GradeRepository;
@@ -38,4 +37,5 @@ public class GradeServiceTest {
         assertEquals(returnedList.get(0).getName(), "a");
 
     }
+
 }
