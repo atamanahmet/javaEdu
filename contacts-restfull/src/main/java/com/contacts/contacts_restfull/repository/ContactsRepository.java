@@ -27,18 +27,9 @@ public class ContactsRepository {
         contactList.set(index, contact);
     }
 
-    public void updateContact(String id, int index, Contact contact) {
-        contact.setId(id);
-        contactList.set(index, contact);
-    }
-
     public void deleteContact(int index) {
         contactList.remove(index);
 
-    }
-
-    public void setId(int index, String id) {
-        contactList.get(index).setId(id);
     }
 
 }

@@ -88,8 +88,9 @@ public class ContactService {
 
         int index = getIndexById(id);
         if (index != Constants.NOT_FOUND) {
-            contactsRepository.setId(index, id);
+            contact.setId(id);
             contactsRepository.updateContact(index, contact);
+            return HttpStatus.OK;
         }
         return HttpStatus.NOT_FOUND;
     }
@@ -108,17 +109,7 @@ public class ContactService {
     }
 
     public boolean isContactBodyValid(Contact contact) {
-        return (contact.getName() == null && contact.getPhoneNumber() == null) ? false : true;
+        return (contact.getName() == null || contact.getPhoneNumber() == null) ? false : true;
 
     }
-
-    // public int getIndexIfExist(String id){
-    // List<Contact> contactList = contactsRepository.getContacts();
-    // for (int i = 0; i < contactList.size(); i++) {
-    // if(contactList.get(i).getId().equals(id)){
-    // return i;
-    // }
-    // }
-    // }
-
 }
