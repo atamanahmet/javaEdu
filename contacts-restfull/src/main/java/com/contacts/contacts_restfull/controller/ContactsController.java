@@ -23,69 +23,42 @@ public class ContactsController {
 
     @GetMapping("/")
     public ResponseEntity<List<Contact>> getIndexPage() {
-        ResponseEntity<List<Contact>> response = ResponseEntity.ok(contactService.getContacts());
 
-        return response;
+        return ResponseEntity.ok(contactService.getContacts());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Contact> getById(@PathVariable String id) {
-        if (contactService.isIdValid(id)) {
+        HttpStatus result = contactService.isIdValid(id);
 
-            return ResponseEntity.ok(contactService.getContactById(id));
-
-        } else {
-
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(contactService.getContactById(id), result);
 
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<Contact> getByName(@PathVariable String name) {
-        if (contactService.isNameValid(name)) {
+    // @GetMapping("/name/{name}")
+    // public ResponseEntity<Contact> getByName(@PathVariable String name) {
 
-            return ResponseEntity.ok(contactService.getContactByName(name));
-        } else {
+    // return new ResponseEntity<>(contactService.getContactByName(name),
+    // contactService.isNameValid(name));
 
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+    // }
 
     @PostMapping("/contact")
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
-        if (contactService.isContactBodyValid(contact)) {
-            HttpStatus status = contactService.saveContact(contact);
+        HttpStatus result = contactService.saveContact(contact);
+        return new ResponseEntity<Contact>(contactService.getContactById(contact.getId()), result);
 
-            return new ResponseEntity<Contact>(contactService.getContactById(contact.getId()), status);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PutMapping("contact/{id}")
     public ResponseEntity<Contact> putContact(@PathVariable String id, @RequestBody Contact contact) {
-        if (contactService.isContactBodyValid(contact)) {
-            HttpStatus status = contactService.updateContact(id, contact);
+        HttpStatus result = contactService.isIdValid(id);
 
-            if (status == HttpStatus.OK) {
-
-                return ResponseEntity.ok(contactService.getContactById(id));
-            }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        } else {
-
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
+        return new ResponseEntity<>(contactService.getContactById(id), result);
     }
 
     @DeleteMapping("delete/{id}")
-    public HttpStatus deleteContact(@PathVariable String id) {
-        if (contactService.isIdValid(id)) {
-
-            return contactService.deleteContact(id);
-        }
-
-        return HttpStatus.NOT_FOUND;
+    public ResponseEntity<HttpStatus> deleteContact(@PathVariable String id) {
+        return new ResponseEntity<>(contactService.deleteContact(id));
     }
 }

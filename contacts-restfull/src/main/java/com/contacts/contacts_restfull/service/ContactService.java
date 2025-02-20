@@ -21,6 +21,7 @@ public class ContactService {
     }
 
     public int getIndexById(String id) {
+
         List<Contact> contactList = contactsRepository.getContacts();
 
         for (int i = 0; i < contactList.size(); i++) {
@@ -32,6 +33,7 @@ public class ContactService {
     }
 
     public int getIndexByContact(Contact contact) {
+
         List<Contact> contactList = contactsRepository.getContacts();
 
         for (int i = 0; i < contactList.size(); i++) {
@@ -55,41 +57,55 @@ public class ContactService {
 
     public Contact getContactById(String id) {
         int index = getIndexById(id);
-        return (index == Constants.NOT_FOUND) ? new Contact() : contactsRepository.getContactByIndex(index);
+        return (index == Constants.NOT_FOUND) ? null : contactsRepository.getContactByIndex(index);
     }
 
-    public boolean isIdValid(String id) {
+    public HttpStatus isIdValid(String id) {
         int index = getIndexById(id);
-        return (index == Constants.NOT_FOUND) ? false : true;
+        return (index == Constants.NOT_FOUND) ? HttpStatus.NOT_FOUND : HttpStatus.OK;
     }
 
-    public boolean isNameValid(String id) {
-        int index = getIndexByName(id);
-        return (index == Constants.NOT_FOUND) ? false : true;
-    }
-
-    public Contact getContactByName(String name) {
+    public HttpStatus isNameValid(String name) {
         int index = getIndexByName(name);
-        return (index == Constants.NOT_FOUND) ? new Contact() : contactsRepository.getContactByIndex(index);
+        return (index == Constants.NOT_FOUND) ? HttpStatus.NOT_FOUND : HttpStatus.OK;
     }
 
     public HttpStatus saveContact(Contact contact) {
-        int index = getIndexById(contact.getId());
-        if (index == Constants.NOT_FOUND) {
-            contactsRepository.addContact(contact);
-            return HttpStatus.CREATED;
-        } else {
-            contactsRepository.updateContact(index, contact);
-            return HttpStatus.OK;
+        return addOrUpdateContact(contact);
+    }
+
+    public HttpStatus addOrUpdateContact(Contact contact) {
+        if (isContactBodyValid(contact)) {
+            int index = getIndexById(contact.getId());
+            if (index == Constants.NOT_FOUND) {
+                contactsRepository.addContact(contact);
+                return HttpStatus.CREATED;
+            } else {
+                contactsRepository.updateContact(index, contact);
+                return HttpStatus.OK;
+            }
         }
+        return HttpStatus.NOT_ACCEPTABLE;
+
     }
 
     public HttpStatus updateContact(String id, Contact contact) {
 
         int index = getIndexById(id);
-        if (index != Constants.NOT_FOUND) {
+        Contact oldContact = getContactById(id);
+
+        if (index != Constants.NOT_FOUND && oldContact != null) {
+
             contact.setId(id);
+
+            if (contact.getName() == null) {
+                contact.setName(oldContact.getName());
+            }
+            if (contact.getPhoneNumber() == null) {
+                contact.setPhoneNumber(oldContact.getPhoneNumber());
+            }
             contactsRepository.updateContact(index, contact);
+
             return HttpStatus.OK;
         }
         return HttpStatus.NOT_FOUND;
@@ -110,6 +126,5 @@ public class ContactService {
 
     public boolean isContactBodyValid(Contact contact) {
         return (contact.getName() == null || contact.getPhoneNumber() == null) ? false : true;
-
     }
 }
