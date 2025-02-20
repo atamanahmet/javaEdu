@@ -52,9 +52,10 @@ public class ContactsController {
 
     @PutMapping("contact/{id}")
     public ResponseEntity<Contact> putContact(@PathVariable String id, @RequestBody Contact contact) {
+
         HttpStatus result = contactService.isIdValid(id);
 
-        return new ResponseEntity<>(contactService.getContactById(id), result);
+        return new ResponseEntity<>(contactService.updateContact(id, contact), result);
     }
 
     @DeleteMapping("delete/{id}")

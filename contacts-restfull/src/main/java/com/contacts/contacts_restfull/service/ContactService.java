@@ -89,7 +89,7 @@ public class ContactService {
 
     }
 
-    public HttpStatus updateContact(String id, Contact contact) {
+    public Contact updateContact(String id, Contact contact) {
 
         int index = getIndexById(id);
         Contact oldContact = getContactById(id);
@@ -106,9 +106,9 @@ public class ContactService {
             }
             contactsRepository.updateContact(index, contact);
 
-            return HttpStatus.OK;
+            return getContactById(id);
         }
-        return HttpStatus.NOT_FOUND;
+        return null;
     }
 
     public HttpStatus deleteContact(String id) {
