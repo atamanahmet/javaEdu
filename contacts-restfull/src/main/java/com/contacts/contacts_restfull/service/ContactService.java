@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.contacts.contacts_restfull.Constants;
 import com.contacts.contacts_restfull.Contact;
+// import com.contacts.contacts_restfull.exception.ApplicationExceptionHandler;
+import com.contacts.contacts_restfull.exception.ContactNotFoundException;
 import com.contacts.contacts_restfull.repository.ContactsRepository;
 
 @Service
@@ -29,7 +31,7 @@ public class ContactService {
                 return i;
             }
         }
-        return Constants.NOT_FOUND;
+        throw new ContactNotFoundException(id);
     }
 
     public int getIndexByContact(Contact contact) {

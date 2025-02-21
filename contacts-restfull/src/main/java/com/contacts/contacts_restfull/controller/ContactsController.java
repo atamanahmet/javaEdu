@@ -35,14 +35,6 @@ public class ContactsController {
 
     }
 
-    // @GetMapping("/name/{name}")
-    // public ResponseEntity<Contact> getByName(@PathVariable String name) {
-
-    // return new ResponseEntity<>(contactService.getContactByName(name),
-    // contactService.isNameValid(name));
-
-    // }
-
     @PostMapping("/contact")
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         HttpStatus result = contactService.saveContact(contact);
