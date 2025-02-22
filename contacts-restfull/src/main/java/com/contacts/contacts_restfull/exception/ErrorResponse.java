@@ -3,8 +3,6 @@ package com.contacts.contacts_restfull.exception;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class ErrorResponse {
     private String message;
 

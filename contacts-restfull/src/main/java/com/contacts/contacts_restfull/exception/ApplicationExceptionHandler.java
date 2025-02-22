@@ -1,16 +1,39 @@
-package com.contacts.contacts_restfull.exception;
+// package com.contacts.contacts_restfull.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+// import java.util.List;
 
-@ControllerAdvice
-public class ApplicationExceptionHandler {
+// import org.springframework.http.HttpHeaders;
+// import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatusCode;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.validation.FieldError;
+// import org.springframework.validation.ObjectError;
+// import org.springframework.web.bind.MethodArgumentNotValidException;
+// import org.springframework.web.bind.annotation.ControllerAdvice;
+// import org.springframework.web.bind.annotation.ExceptionHandler;
+// import org.springframework.web.context.request.WebRequest;
+// import
+// org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-    @ExceptionHandler(ContactNotFoundException.class)
-    public ResponseEntity<Object> handleNoContactFoundException(ContactNotFoundException contactNotFoundException) {
-        return new ResponseEntity<>(new ErrorResponse("Id cannot be found, Please check id."),
-                HttpStatus.NOT_FOUND);
-    }
-}
+// @ControllerAdvice
+// public class ApplicationExceptionHandler {
+
+// @ExceptionHandler(ContactNotFoundException.class)
+// public ResponseEntity<Object>
+// handleNoContactFoundException(ContactNotFoundException
+// contactNotFoundException) {
+// return new ResponseEntity<>(new ErrorResponse("Id cannot be found, Please
+// check id."),
+// HttpStatus.NOT_FOUND);
+// }
+
+// // @ExceptionHandler(InfoMissingException.class)
+// // public ResponseEntity<Object>
+// handleInfoMissingException(InfoMissingException
+// // infoMissingException) {
+// // return new ResponseEntity<>(new ErrorResponse("Some fields empty. Send
+// // request with complete info"),
+// // HttpStatus.NOT_ACCEPTABLE);
+// // }
+
+// }

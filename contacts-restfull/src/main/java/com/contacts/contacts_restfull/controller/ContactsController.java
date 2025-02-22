@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.contacts.contacts_restfull.Contact;
 import com.contacts.contacts_restfull.service.ContactService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,14 +42,18 @@ public class ContactsController {
     }
 
     @PostMapping("/contact")
-    public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
-        HttpStatus result = contactService.saveContact(contact);
-        return new ResponseEntity<Contact>(contactService.getContactById(contact.getId()), result);
+    public ResponseEntity<Contact> createContact(@Valid @RequestBody Contact contact, BindingResult result) {
+        if (result.hasErrors()) {
+            System.out.println(result.getAllErrors());
+        }
+        HttpStatus status = contactService.saveContact(contact);
+
+        return new ResponseEntity<Contact>(contactService.getContactById(contact.getId()), status);
 
     }
 
     @PutMapping("contact/{id}")
-    public ResponseEntity<Contact> putContact(@PathVariable String id, @RequestBody Contact contact) {
+    public ResponseEntity<Contact> putContact(@Valid @RequestBody Contact contact, @PathVariable String id) {
 
         HttpStatus result = contactService.isIdValid(id);
 

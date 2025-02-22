@@ -10,6 +10,7 @@ import com.contacts.contacts_restfull.Constants;
 import com.contacts.contacts_restfull.Contact;
 // import com.contacts.contacts_restfull.exception.ApplicationExceptionHandler;
 import com.contacts.contacts_restfull.exception.ContactNotFoundException;
+import com.contacts.contacts_restfull.exception.InfoMissingException;
 import com.contacts.contacts_restfull.repository.ContactsRepository;
 
 @Service
@@ -31,7 +32,7 @@ public class ContactService {
                 return i;
             }
         }
-        throw new ContactNotFoundException(id);
+        return Constants.NOT_FOUND;
     }
 
     public int getIndexByContact(Contact contact) {
@@ -59,7 +60,10 @@ public class ContactService {
 
     public Contact getContactById(String id) {
         int index = getIndexById(id);
-        return (index == Constants.NOT_FOUND) ? null : contactsRepository.getContactByIndex(index);
+        if (index == Constants.NOT_FOUND) {
+            throw new ContactNotFoundException(id);
+        }
+        return contactsRepository.getContactByIndex(index);
     }
 
     public HttpStatus isIdValid(String id) {
@@ -73,22 +77,16 @@ public class ContactService {
     }
 
     public HttpStatus saveContact(Contact contact) {
-        return addOrUpdateContact(contact);
-    }
 
-    public HttpStatus addOrUpdateContact(Contact contact) {
-        if (isContactBodyValid(contact)) {
-            int index = getIndexById(contact.getId());
-            if (index == Constants.NOT_FOUND) {
-                contactsRepository.addContact(contact);
-                return HttpStatus.CREATED;
-            } else {
-                contactsRepository.updateContact(index, contact);
-                return HttpStatus.OK;
-            }
+        int index = getIndexById(contact.getId());
+
+        if (index == Constants.NOT_FOUND) {
+            contactsRepository.addContact(contact);
+            return HttpStatus.CREATED;
+        } else {
+            contactsRepository.updateContact(index, contact);
+            return HttpStatus.OK;
         }
-        return HttpStatus.NOT_ACCEPTABLE;
-
     }
 
     public Contact updateContact(String id, Contact contact) {
@@ -126,7 +124,8 @@ public class ContactService {
         return contactsRepository.getContactByIndex(index);
     }
 
-    public boolean isContactBodyValid(Contact contact) {
-        return (contact.getName() == null || contact.getPhoneNumber() == null) ? false : true;
-    }
+    // public boolean isContactBodyValid(Contact contact) {
+    // return (contact.getName() == null || contact.getPhoneNumber() == null) ?
+    // false : true;
+    // }
 }

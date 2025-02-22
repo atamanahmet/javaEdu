@@ -12,8 +12,8 @@ public class ContactsRepository {
     private List<Contact> contactList = new ArrayList<>();
 
     public ContactsRepository() {
-        contactList.add(new Contact("id1", "a", "1"));
-        contactList.add(new Contact("id2", "b", "2"));
+        // contactList.add(new Contact("id1", "a", "1"));
+        // contactList.add(new Contact("id2", "b", "2"));
     }
 
     public List<Contact> getContacts() {
