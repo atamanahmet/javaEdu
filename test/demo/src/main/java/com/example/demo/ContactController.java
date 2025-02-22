@@ -16,7 +16,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@Validated
+// @Validated
 public class ContactController {
 
     @Autowired

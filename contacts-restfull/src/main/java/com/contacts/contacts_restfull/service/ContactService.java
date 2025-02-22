@@ -10,7 +10,6 @@ import com.contacts.contacts_restfull.Constants;
 import com.contacts.contacts_restfull.Contact;
 // import com.contacts.contacts_restfull.exception.ApplicationExceptionHandler;
 import com.contacts.contacts_restfull.exception.ContactNotFoundException;
-import com.contacts.contacts_restfull.exception.InfoMissingException;
 import com.contacts.contacts_restfull.repository.ContactsRepository;
 
 @Service
