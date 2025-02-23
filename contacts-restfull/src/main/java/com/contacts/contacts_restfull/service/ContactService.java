@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.contacts.contacts_restfull.Constants;
 import com.contacts.contacts_restfull.Contact;
-// import com.contacts.contacts_restfull.exception.ApplicationExceptionHandler;
 import com.contacts.contacts_restfull.exception.ContactNotFoundException;
 import com.contacts.contacts_restfull.repository.ContactsRepository;
 
@@ -123,8 +122,4 @@ public class ContactService {
         return contactsRepository.getContactByIndex(index);
     }
 
-    // public boolean isContactBodyValid(Contact contact) {
-    // return (contact.getName() == null || contact.getPhoneNumber() == null) ?
-    // false : true;
-    // }
 }

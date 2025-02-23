@@ -2,10 +2,12 @@ package com.contacts.contacts_restfull;
 
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public class Contact {
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private String id;
 
     @NotBlank(message = "Name cannot be empty")
