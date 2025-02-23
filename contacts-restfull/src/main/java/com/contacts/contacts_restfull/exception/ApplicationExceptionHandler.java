@@ -17,10 +17,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ContactNotFoundException.class)
-    public ResponseEntity<Object> handleNoContactFoundException(ContactNotFoundException contactNotFoundException) {
-        return new ResponseEntity<>(new ErrorResponse("Id cannot be found, Please check id."),
+    public ResponseEntity<Object> handleContactNotFoundException(ContactNotFoundException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getLocalizedMessage()),
                 HttpStatus.NOT_FOUND);
     }
+    // @ExceptionHandler(ContactNotFoundException.class)
+    // public ResponseEntity<Object>
+    // handleContactNotFoundException(ContactNotFoundException ex) {
+    // ErrorResponse error = new
+    // ErrorResponse(Arrays.asList(ex.getLocalizedMessage()));
+    // return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    // }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

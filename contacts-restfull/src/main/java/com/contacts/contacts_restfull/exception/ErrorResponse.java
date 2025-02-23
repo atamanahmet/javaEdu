@@ -2,31 +2,32 @@ package com.contacts.contacts_restfull.exception;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ErrorResponse {
 
-    private List<String> errorMessages;
+    private List<String> message = new ArrayList<>();
 
     private String timestamp;
 
     public ErrorResponse(String message) {
-        this.errorMessages.add(message);
+        this.message.add(message);
         this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd - HH:mm"));
     }
 
-    public ErrorResponse(List<String> errorMessages) {
-        this.errorMessages = errorMessages;
+    public ErrorResponse(List<String> message) {
+        this.message = message;
         this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd - HH:mm"));
 
     }
 
-    public List<String> getErrorMessages() {
-        return errorMessages;
+    public List<String> getmessage() {
+        return message;
     }
 
-    public void setErrorMessages(List<String> errorMessages) {
-        this.errorMessages = errorMessages;
+    public void setmessage(List<String> message) {
+        this.message = message;
     }
 
     public String getTimestamp() {
