@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class Contact {
 
-    // @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private String id;
 
     @NotBlank(message = "Name cannot be empty")
@@ -17,10 +17,11 @@ public class Contact {
     private String phoneNumber;
 
     public Contact() {
-        // this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString();
     }
 
     // Test
+
     public Contact(String id, String name, String phoneNumber) {
         this.id = id;
         this.name = name;
