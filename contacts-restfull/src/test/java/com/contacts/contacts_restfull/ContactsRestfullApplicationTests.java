@@ -1,10 +1,10 @@
 package com.contacts.contacts_restfull;
 
 import com.contacts.contacts_restfull.repository.ContactsRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,15 +12,19 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
 // @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @SpringBootTest
@@ -57,82 +61,112 @@ class ContactsRestfullApplicationTests {
 	@Test
 	public void getContactByIdTest() throws Exception {
 
-		// ResponseEntity<Contact> result = testRestTemplate.getForEntity("/1",
-		// Contact.class);
-
-		for (int i = 1; i < contacts.length + 2; i++) {
+		// LoopResponseTest
+		for (int i = 1; i < contacts.length + 5; i++) {
 			if (i < contacts.length + 1) {
-				MvcResult result = mockMvc.perform(get("/" + i)).andReturn();
-
-				assertEquals(HttpStatus.valueOf(200).value(), result.getResponse().getStatus());
+				mockMvc.perform(get("/" + i))
+						.andExpect(status().isOk())
+						.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 			} else {
-				MvcResult result4 = mockMvc.perform(get("/4")).andReturn();
-
-				assertEquals(HttpStatus.NOT_FOUND.value(),
-						result4.getResponse().getStatus());
+				mockMvc.perform(get("/" + i))
+						.andExpect(status().isNotFound())
+						.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 			}
 
 		}
-		// MvcResult result = mockMvc.perform(get("/1")).andReturn();
+
+		// ResponseFieldCheck
+		mockMvc.perform(get("/1"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.name").value("Jon Snow"));
+
+		// Old
+		// for (int i = 1; i < contacts.length + 2; i++) {
+		// if (i < contacts.length + 1) {
+		// MvcResult result = mockMvc.perform(get("/" + i)).andReturn();
 
 		// assertEquals(HttpStatus.valueOf(200).value(),
 		// result.getResponse().getStatus());
-
-		// MvcResult result2 = mockMvc.perform(get("/2")).andReturn();
-
-		// assertEquals(HttpStatus.OK.value(), result2.getResponse().getStatus());
-
-		// MvcResult result3 = mockMvc.perform(get("/3")).andReturn();
-
-		// assertEquals(HttpStatus.OK.value(), result3.getResponse().getStatus());
-
+		// } else {
 		// MvcResult result4 = mockMvc.perform(get("/4")).andReturn();
 
 		// assertEquals(HttpStatus.NOT_FOUND.value(),
 		// result4.getResponse().getStatus());
+		// }
+
+		// }
 	}
 
 	@Test
 	public void getAllContactsTest() throws Exception {
-		ResultActions mockGetRequest = mockMvc.perform(get("/"));
-		MvcResult result = mockGetRequest.andReturn();
-		assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
 
-		mockMvc.perform(get("/")).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+		List<Contact> list = Arrays.asList(new ObjectMapper().readValue(mockMvc.perform(get("/"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andReturn()
+				.getResponse()
+				.getContentAsString(), Contact[].class));
+
+		assertEquals(list.get(0).getName(), "Jon Snow");
+
+		// Old
+		// MvcResult result = mockMvc.perform(get("/"))
+		// .andExpect(status().isOk())
+		// .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+		// .andReturn();
+
+		// ResultActions mockGetRequest = mockMvc.perform(get("/"));
+		// MvcResult result = mockGetRequest.andReturn();
+		// assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+
+		// mockMvc.perform(get("/")).andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
 	}
 
 	@Test
 	public void validContactCreation() throws Exception {
-		String requestBody = "{\"name\":\"x\",\"phoneNumber\":\"x\"}";
+		String validRequestBody = "{\"name\":\"x\",\"phoneNumber\":\"x\"}";
 
-		ResultActions mockPostRequest = mockMvc
-				.perform(post("/contact").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+		// ValidRequestBody
+		MvcResult result = mockMvc.perform(post("/contact")
+				.content(validRequestBody)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andReturn();
 
-		assertEquals(HttpStatus.CREATED.value(), mockPostRequest.andReturn().getResponse().getStatus());
+		// ValidResponseFieldCheck
+		assertEquals("x",
+				new ObjectMapper()
+						.readValue(result.getResponse().getContentAsString(), Contact.class)
+						.getName());
 
-		mockPostRequest.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 	}
 
 	@Test
 	public void invalidContactCreation() throws Exception {
-		String requestBody = "{\"name\":\"\",\"phoneNumber\":\"\"}";
+		String invalidRequestBody = "{\"name\":\"\",\"phoneNumber\":\"\"}";
 
-		ResultActions mockPostRequest = mockMvc
-				.perform(post("/contact").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-
-		assertEquals(HttpStatus.NOT_ACCEPTABLE.value(), mockPostRequest.andReturn().getResponse().getStatus());
+		// InvalidRequestBody
+		mockMvc.perform(post("/contact")
+				.content(invalidRequestBody)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotAcceptable())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 	}
 
 	@Test
 	public void contactNotFoundTest() throws Exception {
-		MvcResult result = mockMvc.perform(get("/0")).andReturn();
+		mockMvc.perform(get("/invalidId"))
+				.andExpect(status().isNotFound())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-		assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
 	}
 
 }
 
+// Old
 // import org.junit.jupiter.api.Test;
 // import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.boot.test.context.SpringBootTest;
