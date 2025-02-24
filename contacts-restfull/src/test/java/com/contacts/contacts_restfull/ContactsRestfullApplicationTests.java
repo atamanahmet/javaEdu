@@ -72,7 +72,6 @@ class ContactsRestfullApplicationTests {
 						.andExpect(status().isNotFound())
 						.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 			}
-
 		}
 
 		// ResponseFieldCheck
@@ -80,22 +79,6 @@ class ContactsRestfullApplicationTests {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.name").value("Jon Snow"));
-
-		// Old
-		// for (int i = 1; i < contacts.length + 2; i++) {
-		// if (i < contacts.length + 1) {
-		// MvcResult result = mockMvc.perform(get("/" + i)).andReturn();
-
-		// assertEquals(HttpStatus.valueOf(200).value(),
-		// result.getResponse().getStatus());
-		// } else {
-		// MvcResult result4 = mockMvc.perform(get("/4")).andReturn();
-
-		// assertEquals(HttpStatus.NOT_FOUND.value(),
-		// result4.getResponse().getStatus());
-		// }
-
-		// }
 	}
 
 	@Test
@@ -109,19 +92,6 @@ class ContactsRestfullApplicationTests {
 				.getContentAsString(), Contact[].class));
 
 		assertEquals(list.get(0).getName(), "Jon Snow");
-
-		// Old
-		// MvcResult result = mockMvc.perform(get("/"))
-		// .andExpect(status().isOk())
-		// .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-		// .andReturn();
-
-		// ResultActions mockGetRequest = mockMvc.perform(get("/"));
-		// MvcResult result = mockGetRequest.andReturn();
-		// assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-
-		// mockMvc.perform(get("/")).andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
 	}
 
 	@Test
@@ -141,7 +111,6 @@ class ContactsRestfullApplicationTests {
 				new ObjectMapper()
 						.readValue(result.getResponse().getContentAsString(), Contact.class)
 						.getName());
-
 	}
 
 	@Test
