@@ -3,8 +3,9 @@ package com.grade.grade_submition.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.grade.grade_submition.Grade;
 import org.springframework.stereotype.Repository;
+
+import com.grade.grade_submition.domain.Grade;
 
 @Repository
 public class GradeRepository {

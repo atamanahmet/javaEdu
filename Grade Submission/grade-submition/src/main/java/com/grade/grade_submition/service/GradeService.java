@@ -3,7 +3,7 @@ package com.grade.grade_submition.service;
 import java.util.List;
 
 import com.grade.grade_submition.Constants;
-import com.grade.grade_submition.Grade;
+import com.grade.grade_submition.domain.Grade;
 import com.grade.grade_submition.repository.GradeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

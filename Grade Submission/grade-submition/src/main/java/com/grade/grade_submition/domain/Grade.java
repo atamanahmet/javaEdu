@@ -1,23 +1,35 @@
-package com.grade.grade_submition;
+package com.grade.grade_submition.domain;
 
-import java.util.UUID;
+// import java.util.UUID;
+
+import com.grade.grade_submition.Validation;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 
 public class Grade {
+    @Column(name = "name")
     @NotBlank(message = "Name field can not be blank")
     private String name;
 
+    @Column(name = "subject")
     @NotBlank(message = "Subject field can not be blank")
     private String subject;
 
+    @Column(name = "score")
     @NotBlank(message = "Score field can not be blank")
     @Validation(message = "Wrong grade type. Must be letter")
     private String score;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     public Grade() {
-        this.id = UUID.randomUUID().toString();
+        // this.id = UUID.randomUUID().toString();
     }
 
     // Test
