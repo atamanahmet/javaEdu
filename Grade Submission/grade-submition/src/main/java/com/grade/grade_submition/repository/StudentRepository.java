@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.grade.grade_submition.domain.Student;
 
 @Repository
-public interface StudentRepository extends CrudRepository<Student, Long> {
+public interface StudentRepository extends CrudRepository<Student, String> {
 
 }

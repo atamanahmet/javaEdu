@@ -38,18 +38,18 @@ public class StudentService implements StudentRepository {
     }
 
     @Override
-    public void deleteAllById(Iterable<? extends Long> ids) {
+    public void deleteAllById(Iterable<? extends String> ids) {
         studentRepository.deleteAllById(ids);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         studentRepository.deleteById(id);
 
     }
 
     @Override
-    public boolean existsById(Long id) {
+    public boolean existsById(String id) {
         return studentRepository.existsById(id);
 
     }
@@ -60,12 +60,12 @@ public class StudentService implements StudentRepository {
     }
 
     @Override
-    public Iterable<Student> findAllById(Iterable<Long> ids) {
+    public Iterable<Student> findAllById(Iterable<String> ids) {
         return studentRepository.findAllById(ids);
     }
 
     @Override
-    public Optional<Student> findById(Long id) {
+    public Optional<Student> findById(String id) {
         return studentRepository.findById(id);
     }
 

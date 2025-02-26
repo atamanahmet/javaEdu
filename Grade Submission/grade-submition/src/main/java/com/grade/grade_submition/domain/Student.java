@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "students")
@@ -21,9 +23,11 @@ public class Student {
     private String id;
 
     @Column(name = "name", nullable = false)
+    @NotBlank(message = "Name can not be empty")
     private String name;
 
-    @Column(name = "birth_date")
+    @Column(name = "birth_date", nullable = false)
+    @NotNull(message = "Birth date can not be empty")
     private LocalDate birthDate;
 
     public Student() {
