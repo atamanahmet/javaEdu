@@ -1,65 +1,81 @@
 package com.grade.grade_submition.service;
 
-import java.util.List;
+import java.util.Optional;
 
-import com.grade.grade_submition.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.grade.grade_submition.domain.Grade;
 import com.grade.grade_submition.repository.GradeRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
 @Service
-public class GradeService {
+public class GradeService implements GradeRepository {
 
     @Autowired
-    private GradeRepository gradeRepository;
+    GradeRepository gradeRepository;
 
-    public List<Grade> getGradeList() {
-        return gradeRepository.getGradeList();
+    @Override
+    public long count() {
+        return gradeRepository.count();
     }
 
-    public String updateGrade(int index, Grade grade) {
-        gradeRepository.updateGrade(index, grade);
-        return Constants.SUCCESS;
-
-    }
-
-    public String addGrade(Grade grade) {
-        gradeRepository.addGrade(grade);
-        return Constants.SUCCESS;
-    }
-
-    public int ifExistGetIndex(String id) {
-        List<Grade> gradeList = gradeRepository.getGradeList();
-        for (int i = 0; i < gradeList.size(); i++) {
-            if (gradeList.get(i).getId().equals(id)) {
-                return i;
-            }
-        }
-        return Constants.NOT_FOUND;
-    }
-
-    public Grade getGrade(String id) {
-        int index = ifExistGetIndex(id);
-
-        return (index == Constants.NOT_FOUND) ? new Grade() : gradeRepository.getGrade(index);
-    }
-
-    public HttpStatus submitGrade(Grade grade) {
-        int index = ifExistGetIndex(grade.getId());
-        if (index == Constants.NOT_FOUND) {
-            addGrade(grade);
-            return HttpStatus.CREATED;
-        } else {
-            updateGrade(index, grade);
-            return HttpStatus.ACCEPTED;
-        }
+    @Override
+    public void delete(Grade grade) {
+        gradeRepository.delete(grade);
 
     }
 
-    public void retainId(String id, Grade grade) {
-        grade.setId(id);
+    @Override
+    public void deleteAll() {
+        gradeRepository.deleteAll();
+
     }
+
+    @Override
+    public void deleteAll(Iterable<? extends Grade> entities) {
+        gradeRepository.deleteAll(entities);
+    }
+
+    @Override
+    public void deleteAllById(Iterable<? extends Long> ids) {
+        gradeRepository.deleteAllById(ids);
+
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        gradeRepository.deleteById(id);
+
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return gradeRepository.existsById(id);
+    }
+
+    @Override
+    public Iterable<Grade> findAll() {
+        return gradeRepository.findAll();
+    }
+
+    @Override
+    public Iterable<Grade> findAllById(Iterable<Long> ids) {
+        return gradeRepository.findAllById(ids);
+    }
+
+    @Override
+    public Optional<Grade> findById(Long id) {
+        return gradeRepository.findById(id);
+    }
+
+    @Override
+    public Grade save(Grade grade) {
+        return (Grade) gradeRepository.save(grade);
+    }
+
+    @Override
+    public <S extends Grade> Iterable<S> saveAll(Iterable<S> grades) {
+        return gradeRepository.saveAll(grades);
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.grade.grade_submition.controller;
 
-import javax.naming.Binding;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,9 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.grade.grade_submition.domain.Grade;
-import com.grade.grade_submition.domain.Student;
 import com.grade.grade_submition.service.GradeService;
-import com.grade.grade_submition.service.StudentService;
 
 import jakarta.validation.Valid;
 
@@ -29,50 +24,35 @@ public class GradeController {
     @Autowired
     private GradeService gradeService;
 
-    @Autowired
-    private StudentService studentService;
-
-    @GetMapping("/")
-    public ResponseEntity<Object> getGrades(@RequestParam(required = false, value = "id") String id) {
-        return new ResponseEntity<>(gradeService.getGradeList(), HttpStatus.OK);
+    @GetMapping("/grade")
+    public ResponseEntity<Object> getGrades(@RequestParam(required = false, value = "id") Long id) {
+        return new ResponseEntity<>(gradeService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/grade/{id}")
-    public ResponseEntity<Object> getGradeById(@RequestParam(required = false, value = "id") String id) {
-        return new ResponseEntity<>(gradeService.getGrade(id), HttpStatus.OK);
+    public ResponseEntity<Object> getGradeById(@RequestParam(required = false, value = "id") Long id) {
+        return new ResponseEntity<>(gradeService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/grade")
-    public ResponseEntity<Grade> createGrade(@RequestBody Grade grade) {
+    public ResponseEntity<Grade> createGrade(@Valid @RequestBody Grade grade, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<Grade>(HttpStatus.NOT_ACCEPTABLE);
 
-        HttpStatus status = gradeService.submitGrade(grade);
-        return new ResponseEntity<Grade>(gradeService.getGrade(grade.getId()), status);
+        }
+        return new ResponseEntity<Grade>(gradeService.save(grade), HttpStatus.CREATED);
     }
 
-    @GetMapping("/student")
-    public ResponseEntity<Object> getStudents() {
-        return new ResponseEntity<>(studentService.findAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/student/{id}")
-    public ResponseEntity<Object> getStudentById(@PathVariable(required = false, value = "id") String id) {
-
-        return new ResponseEntity<>(studentService.findById(id), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/student/{id}")
-    public ResponseEntity<Object> deleteStudentById(@PathVariable(required = false, value = "id") String id) {
-        studentService.deleteById(id);
+    @DeleteMapping("grade/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteById(@PathVariable(required = true) Long id) {
+        gradeService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/student")
-    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student, BindingResult result) {
-
-        if (result.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
-        return new ResponseEntity<Student>(studentService.save(student), HttpStatus.CREATED);
+    @DeleteMapping("grade/delete/all")
+    public ResponseEntity<HttpStatus> deleteAll() {
+        gradeService.deleteAll();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // Old

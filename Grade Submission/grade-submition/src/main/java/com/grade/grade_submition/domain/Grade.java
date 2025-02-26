@@ -1,35 +1,30 @@
 package com.grade.grade_submition.domain;
 
-// import java.util.UUID;
-
-import com.grade.grade_submition.Validation;
+import com.grade.grade_submition.validation.Validation;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
+@Entity
+@Table(name = "grade")
 public class Grade {
-    @Column(name = "name")
-    @NotBlank(message = "Name field can not be blank")
-    private String name;
 
-    @Column(name = "subject")
-    @NotBlank(message = "Subject field can not be blank")
-    private String subject;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "score")
+    @Column(name = "score", nullable = false)
     @NotBlank(message = "Score field can not be blank")
     @Validation(message = "Wrong grade type. Must be letter")
     private String score;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
-
     public Grade() {
-        // this.id = UUID.randomUUID().toString();
     }
 
     // Test
@@ -43,22 +38,6 @@ public class Grade {
     // }
     // }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
     public String getScore() {
         return score;
     }
@@ -67,11 +46,11 @@ public class Grade {
         this.score = score;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

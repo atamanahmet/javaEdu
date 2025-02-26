@@ -1,4 +1,4 @@
-package com.grade.grade_submition;
+package com.grade.grade_submition.validation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -1,9 +1,6 @@
 package com.grade.grade_submition.domain;
 
 import java.time.LocalDate;
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,8 +16,8 @@ import jakarta.validation.constraints.NotNull;
 public class Student {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "name", nullable = false)
     @NotBlank(message = "Name can not be empty")
@@ -34,11 +31,11 @@ public class Student {
 
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
