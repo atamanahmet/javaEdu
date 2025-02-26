@@ -7,6 +7,7 @@ import com.grade.grade_submition.Grade;
 import com.grade.grade_submition.repository.GradeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,14 +47,19 @@ public class GradeService {
         return (index == Constants.NOT_FOUND) ? new Grade() : gradeRepository.getGrade(index);
     }
 
-    public String submitGrade(Grade grade) {
+    public HttpStatus submitGrade(Grade grade) {
         int index = ifExistGetIndex(grade.getId());
         if (index == Constants.NOT_FOUND) {
             addGrade(grade);
+            return HttpStatus.CREATED;
         } else {
             updateGrade(index, grade);
+            return HttpStatus.ACCEPTED;
         }
 
-        return Constants.SUCCESS;
+    }
+
+    public void retainId(String id, Grade grade) {
+        grade.setId(id);
     }
 }

@@ -1,23 +1,28 @@
 package com.grade.grade_submition.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 // import org.springframework.http.HttpStatus;
-// import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-// import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.grade.grade_submition.Grade;
 import com.grade.grade_submition.service.GradeService;
 
 import jakarta.validation.Valid;
 
-@Controller
+@RestController
 // @CrossOrigin(origins = "http://localhost:3000")
 public class GradeController {
 
@@ -25,43 +30,52 @@ public class GradeController {
     private GradeService gradeService;
 
     @GetMapping("/")
-    public String getForm(Model model, @RequestParam(value = "id", required = false) String id) {
-
-        model.addAttribute("grade", gradeService.getGrade(id));
-
-        return "form";
+    public ResponseEntity<Object> getGrades(@RequestParam(required = false, value = "id") String id) {
+        return new ResponseEntity<>(gradeService.getGradeList(), HttpStatus.OK);
     }
 
-    @GetMapping("/grades")
-    public String getGrades(Model model) {
-
-        model.addAttribute("grades", gradeService.getGradeList());
-
-        return "grades";
+    @GetMapping("/grade/{id}")
+    public ResponseEntity<Object> getGradeById(@RequestParam(required = false, value = "id") String id) {
+        return new ResponseEntity<>(gradeService.getGrade(id), HttpStatus.OK);
     }
 
-    // @GetMapping("/grades")
-    // public ResponseEntity<List<Grade>> getGrades() {
+    @PostMapping("/grade")
+    public ResponseEntity<Grade> getGradeById(@RequestBody Grade grade) {
 
-    // List<Grade> asd = new ArrayList<>();
+        HttpStatus status = gradeService.submitGrade(grade);
+        return new ResponseEntity<Grade>(gradeService.getGrade(grade.getId()), status);
+    }
 
-    // asd.add(new Grade("a", "a", "a"));
-    // asd.add(new Grade("b", "b", "b"));
-    // asd.add(new Grade("c", "c", "c"));
+    // Old
 
-    // return new ResponseEntity<>(asd, HttpStatus.OK);
+    // @GetMapping("/")
+    // public String getForm(Model model, @RequestParam(value = "id", required =
+    // false) String id) {
+
+    // model.addAttribute("grade", gradeService.getGrade(id));
+
+    // return "form";
     // }
 
-    @PostMapping("/handleSubmit")
-    public String handleSubmit(@Valid Grade grade, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    // @GetMapping("/grades")
+    // public String getGrades(Model model) {
 
-        if (bindingResult.hasErrors())
-            return "form.html";
+    // model.addAttribute("grades", gradeService.getGradeList());
 
-        redirectAttributes.addFlashAttribute("status",
-                gradeService.submitGrade(grade));
+    // return "grades";
+    // }
 
-        return "redirect:/grades";
-    }
+    // @PostMapping("/handleSubmit")
+    // public String handleSubmit(@Valid Grade grade, BindingResult bindingResult,
+    // RedirectAttributes redirectAttributes) {
+
+    // if (bindingResult.hasErrors())
+    // return "form.html";
+
+    // redirectAttributes.addFlashAttribute("status",
+    // gradeService.submitGrade(grade));
+
+    // return "redirect:/grades";
+    // }
 
 }

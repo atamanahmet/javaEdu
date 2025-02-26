@@ -11,7 +11,6 @@ public class Grade {
     private String subject;
 
     @NotBlank(message = "Score field can not be blank")
-
     @Validation(message = "Wrong grade type. Must be letter")
     private String score;
 
@@ -21,15 +20,16 @@ public class Grade {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Grade(String name, String subject, String score) {
-        this.name = name;
-        this.subject = subject;
-        this.score = score;
-        if (this.id == null) {
-            this.id = UUID.randomUUID().toString();
+    // Test
+    // public Grade(String name, String subject, String score) {
+    // this.name = name;
+    // this.subject = subject;
+    // this.score = score;
+    // if (this.id == null) {
+    // this.id = UUID.randomUUID().toString();
 
-        }
-    }
+    // }
+    // }
 
     public String getName() {
         return name;
