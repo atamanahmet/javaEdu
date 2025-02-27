@@ -7,11 +7,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "grade")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Grade {
 
     @Id
@@ -24,34 +34,7 @@ public class Grade {
     @Validation(message = "Wrong grade type. Must be letter")
     private String score;
 
-    public Grade() {
-    }
-
-    // Test
-    // public Grade(String name, String subject, String score) {
-    // this.name = name;
-    // this.subject = subject;
-    // this.score = score;
-    // if (this.id == null) {
-    // this.id = UUID.randomUUID().toString();
-
-    // }
-    // }
-
-    public String getScore() {
-        return score;
-    }
-
-    public void setScore(String score) {
-        this.score = score;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
+    Student student;
 }

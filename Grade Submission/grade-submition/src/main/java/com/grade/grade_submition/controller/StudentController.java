@@ -28,8 +28,11 @@ public class StudentController {
 
     @GetMapping("/student/{id}")
     public ResponseEntity<Object> getStudentById(@PathVariable(required = false, value = "id") Long id) {
+        if (studentService.existsById(id)) {
+            return new ResponseEntity<>(studentService.findById(id), HttpStatus.OK);
 
-        return new ResponseEntity<>(studentService.findById(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/student/{id}")
