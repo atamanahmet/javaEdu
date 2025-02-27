@@ -1,14 +1,14 @@
 package com.grade.grade_submition.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,15 +34,23 @@ public class GradeController {
         return new ResponseEntity<>(gradeService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/grade/{studentId}")
-    public ResponseEntity<Object> getGradeByStudentId(@PathVariable(value = "studentId") Long studentId) {
-        System.out.println(studentId);
-        if (studentService.existsById(studentId)) {
-            return new ResponseEntity<>(gradeService.getGradesFromStudentId(studentId), HttpStatus.OK);
+    @GetMapping("/grade/student/{studentId}")
+    public ResponseEntity<Object> getGradesByStudentId(@PathVariable(value = "studentId") Long studentId) {
+        List<Grade> list = gradeService.getGradesByStudentId(studentId);
+        System.out.println(list);
 
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return (list.isEmpty()) ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(list, HttpStatus.OK);
+    }
 
+    @GetMapping("/grade/student/{studentId}/course/{courseId}")
+    public ResponseEntity<Object> getGradeByStudentId(@PathVariable(value = "studentId") Long studentId,
+            @PathVariable(value = "courseId") Long courseId) {
+
+        Grade grade = gradeService.getGradeByStudentId(studentId);
+
+        return (grade == null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(grade, HttpStatus.OK);
     }
 
     @PostMapping("/grade/{studentId}")

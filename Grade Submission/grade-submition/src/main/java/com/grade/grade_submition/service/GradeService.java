@@ -78,10 +78,20 @@ public class GradeService {
         return gradeRepository.save(grade);
     }
 
-    public List<Grade> getGradesFromStudentId(Long studentId) {
-        List<Grade> gradeList = (List<Grade>) gradeRepository.findAll();
-        return gradeList.stream().filter(grade -> grade.getStudent().getId() == studentId).collect(Collectors.toList());
-
+    public List<Grade> getGradesByStudentId(Long studentId) {
+        return (List<Grade>) gradeRepository.findAllByStudentId(studentId);
     }
+
+    public Grade getGradeByStudentId(Long studentId) {
+        return gradeRepository.findByStudentId(studentId);
+    }
+
+    // Without jpa
+    // public List<Grade> getGradesFromStudentId(Long studentId) {
+    // List<Grade> gradeList = (List<Grade>) gradeRepository.findAll();
+    // return gradeList.stream().filter(grade -> grade.getStudent().getId() ==
+    // studentId).collect(Collectors.toList());
+
+    // }
 
 }
