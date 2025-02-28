@@ -13,4 +13,6 @@ public interface GradeRepository extends CrudRepository<Grade, Long> {
 
     Grade findByStudentId(Long studentId);
 
+    void deleteAllByStudentId(Long studentId);
+
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,11 @@ public class Grade {
     @Validation(message = "Wrong grade type. Must be letter")
     private String score;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "student_id", referencedColumnName = "id")
     Student student;
+
+    @OneToOne
+    // @JoinColumn(name = )
+    private Course course;
 }

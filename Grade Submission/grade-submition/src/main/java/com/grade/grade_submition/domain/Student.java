@@ -1,18 +1,23 @@
 package com.grade.grade_submition.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "students")
+@AllArgsConstructor
 public class Student {
     @Id
     @Column(name = "id")
@@ -26,6 +31,9 @@ public class Student {
     @Column(name = "birth_date", nullable = false)
     @NotNull(message = "Birth date can not be empty")
     private LocalDate birthDate;
+
+    @OneToMany(mappedBy = "student")
+    private List<Grade> grades;
 
     public Student() {
 

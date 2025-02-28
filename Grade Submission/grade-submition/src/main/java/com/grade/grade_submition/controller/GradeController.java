@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.grade.grade_submition.domain.Grade;
+import com.grade.grade_submition.service.CourseService;
 import com.grade.grade_submition.service.GradeService;
 import com.grade.grade_submition.service.StudentService;
 
@@ -28,6 +29,9 @@ public class GradeController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private CourseService courseService;
 
     @GetMapping("/grade")
     public ResponseEntity<Object> getGrades() {
@@ -53,14 +57,16 @@ public class GradeController {
                 : new ResponseEntity<>(grade, HttpStatus.OK);
     }
 
-    @PostMapping("/grade/{studentId}")
+    @PostMapping("/grade/course/{courseId}/student/{studentId}")
     public ResponseEntity<Grade> createGrade(@Valid @RequestBody Grade grade, BindingResult result,
-            @PathVariable(required = true) Long studentId) {
+            @PathVariable(required = true) Long studentId,
+            @PathVariable(required = true, value = "courseId") Long courseId) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
-        } else if (studentService.existsById(studentId)) {
-            return new ResponseEntity<Grade>(gradeService.saveGrade(grade, studentId), HttpStatus.CREATED);
+        } else if (studentService.existsById(studentId) && courseService.isExistsById(courseId)) {
+            return new ResponseEntity<Grade>(gradeService.saveGrade(grade, studentId, courseId),
+                    HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

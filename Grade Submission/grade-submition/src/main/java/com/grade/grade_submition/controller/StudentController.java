@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grade.grade_submition.domain.Student;
+import com.grade.grade_submition.service.GradeService;
 import com.grade.grade_submition.service.StudentService;
 
 import jakarta.validation.Valid;
@@ -20,6 +21,8 @@ import jakarta.validation.Valid;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private GradeService gradeService;
 
     @GetMapping("/student")
     public ResponseEntity<Object> getStudents() {
@@ -35,9 +38,13 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/student/{id}")
-    public ResponseEntity<Object> deleteStudentById(@PathVariable(required = false, value = "id") Long id) {
-        studentService.deleteById(id);
+    @DeleteMapping("/student/delete/{studentId}")
+    public ResponseEntity<Object> deleteStudentById(
+            @PathVariable(required = true, value = "studentId") Long studentId) {
+
+        gradeService.deleteGradesByStudentId(studentId);
+
+        studentService.deleteById(studentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
