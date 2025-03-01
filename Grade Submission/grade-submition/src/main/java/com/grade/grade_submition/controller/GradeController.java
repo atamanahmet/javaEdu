@@ -48,10 +48,10 @@ public class GradeController {
     }
 
     @GetMapping("/grade/student/{studentId}/course/{courseId}")
-    public ResponseEntity<Object> getGradeByStudentId(@PathVariable(value = "studentId") Long studentId,
+    public ResponseEntity<Object> getGradeByBothIds(@PathVariable(value = "studentId") Long studentId,
             @PathVariable(value = "courseId") Long courseId) {
 
-        Grade grade = gradeService.getGradeByStudentId(studentId);
+        Grade grade = gradeService.getGradeByStudentIdAndCourseId(studentId, courseId);
 
         return (grade == null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(grade, HttpStatus.OK);
@@ -61,6 +61,7 @@ public class GradeController {
     public ResponseEntity<Grade> createGrade(@Valid @RequestBody Grade grade, BindingResult result,
             @PathVariable(required = true) Long studentId,
             @PathVariable(required = true, value = "courseId") Long courseId) {
+
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 

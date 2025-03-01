@@ -3,6 +3,8 @@ package com.grade.grade_submition.domain;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +34,8 @@ public class Student {
     @NotNull(message = "Birth date can not be empty")
     private LocalDate birthDate;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Grade> grades;
 
     public Student() {

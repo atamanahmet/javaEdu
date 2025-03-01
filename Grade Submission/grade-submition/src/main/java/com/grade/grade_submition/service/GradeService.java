@@ -1,7 +1,6 @@
 package com.grade.grade_submition.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,12 +71,8 @@ public class GradeService {
 
     public Grade saveGrade(Grade grade, Long studentId, Long courseId) {
 
-        if (studentRepository.existsById(studentId)) {
-            grade.setStudent(studentRepository.findById(studentId).get());
-        }
-        if (courseRepository.existsById(courseId)) {
-            grade.setCourse(courseRepository.findById(courseId).get());
-        }
+        grade.setStudent(studentRepository.findById(studentId).get());
+        grade.setCourse(courseRepository.findById(courseId).get());
 
         return gradeRepository.save(grade);
     }
@@ -86,26 +81,28 @@ public class GradeService {
         return (List<Grade>) gradeRepository.findAllByStudentId(studentId);
     }
 
-    public Grade getGradeByStudentId(Long studentId) {
-        return gradeRepository.findByStudentId(studentId);
+    public Grade getGradeByStudentIdAndCourseId(Long studentId, Long courseId) {
+        return gradeRepository.findByStudentIdAndCourseId(studentId, courseId);
     }
 
     // Without cascade, delete grades with student deletion
-    public void deleteGradesByStudentId(Long studentId) {
 
-        gradeRepository.deleteAllById(gradeRepository.findAllByStudentId(studentId)
-                .stream()
-                .map(grade -> grade.getId())
-                .collect(Collectors.toList()));
+    // public void deleteGradesByStudentId(Long studentId) {
 
-        // OLD
-        // List<Long> gradeIdList = new ArrayList<>();
+    // gradeRepository.deleteAllById(gradeRepository.findAllByStudentId(studentId)
+    // .stream()
+    // .map(grade -> grade.getId())
+    // .collect(Collectors.toList()));
 
-        // gradeRepository.findAllByStudentId(studentId).iterator()
-        // .forEachRemaining(grade -> gradeIdList.add(grade.getId()));
-        // gradeRepository.deleteAllById(gradeIdList);
+    // OLD
+    // List<Long> gradeIdList = new ArrayList<>();
 
-    }
+    // gradeRepository.findAllByStudentId(studentId).iterator()
+    // .forEachRemaining(grade -> gradeIdList.add(grade.getId()));
+    // gradeRepository.deleteAllById(gradeIdList);
+
+    // }
+
     // Without interface custom method, getAllGradesFromStudent
 
     // public List<Grade> getGradesFromStudentId(Long studentId) {

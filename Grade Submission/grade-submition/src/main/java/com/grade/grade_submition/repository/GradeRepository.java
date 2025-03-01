@@ -11,7 +11,7 @@ import com.grade.grade_submition.domain.Grade;
 public interface GradeRepository extends CrudRepository<Grade, Long> {
     List<Grade> findAllByStudentId(Long studentId);
 
-    Grade findByStudentId(Long studentId);
+    Grade findByStudentIdAndCourseId(Long studentId, Long courseId);
 
     void deleteAllByStudentId(Long studentId);
 
