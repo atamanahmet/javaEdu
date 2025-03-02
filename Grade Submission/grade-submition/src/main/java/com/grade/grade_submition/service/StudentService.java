@@ -1,6 +1,7 @@
 package com.grade.grade_submition.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,8 +56,8 @@ public class StudentService {
         return (List<Student>) studentRepository.findAllById(ids);
     }
 
-    public Student findById(Long id) {
-        return studentRepository.findById(id).get();
+    public Optional<Student> findById(Long id) {
+        return studentRepository.findById(id);
     }
 
     public Student save(Student student) {

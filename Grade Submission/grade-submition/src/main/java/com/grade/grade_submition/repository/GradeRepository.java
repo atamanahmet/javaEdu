@@ -1,9 +1,11 @@
 package com.grade.grade_submition.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.grade.grade_submition.domain.Grade;
 
@@ -11,8 +13,9 @@ import com.grade.grade_submition.domain.Grade;
 public interface GradeRepository extends CrudRepository<Grade, Long> {
     List<Grade> findAllByStudentId(Long studentId);
 
-    Grade findByStudentIdAndCourseId(Long studentId, Long courseId);
+    Optional<Grade> findByStudentIdAndCourseId(Long studentId, Long courseId);
 
-    void deleteAllByStudentId(Long studentId);
+    @Transactional
+    void deleteAllByStudentIdAndCourseId(Long studentId, Long courseId);
 
 }

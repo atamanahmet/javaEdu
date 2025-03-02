@@ -1,6 +1,7 @@
 package com.grade.grade_submition.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,10 +52,10 @@ public class GradeController {
     public ResponseEntity<Object> getGradeByBothIds(@PathVariable(value = "studentId") Long studentId,
             @PathVariable(value = "courseId") Long courseId) {
 
-        Grade grade = gradeService.getGradeByStudentIdAndCourseId(studentId, courseId);
+        Optional<Grade> grade = gradeService.getGradeByStudentIdAndCourseId(studentId, courseId);
 
-        return (grade == null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(grade, HttpStatus.OK);
+        return (grade.isPresent()) ? new ResponseEntity<>(grade, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/grade/course/{courseId}/student/{studentId}")
@@ -75,11 +76,26 @@ public class GradeController {
 
     }
 
-    @DeleteMapping("grade/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteById(@PathVariable(required = true) Long id) {
-        gradeService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @DeleteMapping("/grade/delete/student/{studentId}/course/{courseId}")
+    public ResponseEntity<HttpStatus> deleteWithBothIds(
+            @PathVariable(required = true, value = "studentId") Long studentId,
+            @PathVariable(required = true, value = "courseId") Long courseId) {
+        if (studentService.existsById(studentId) && courseService.isExistsById(courseId)) {
+            gradeService.deleteAllByStudentIdAndCourseId(studentId, courseId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
+
+    // @DeleteMapping("grade/delete/{id}")
+    // public ResponseEntity<HttpStatus>
+    // deleteByStudentIdAndCourseId(@PathVariable(required = true, value =
+    // "studentId") Long studentId,
+    // @PathVariable(required = true, value = "courseId") Long courseId) {
+    // gradeService.deleteAllByStudentIdAndCourseId(studentId, courseId);
+    // return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    // }
 
     @DeleteMapping("grade/delete/all")
     public ResponseEntity<HttpStatus> deleteAll() {

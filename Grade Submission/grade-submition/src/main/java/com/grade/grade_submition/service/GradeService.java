@@ -1,6 +1,7 @@
 package com.grade.grade_submition.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,8 +62,8 @@ public class GradeService {
         return (List<Grade>) gradeRepository.findAllById(ids);
     }
 
-    public Grade findById(Long id) {
-        return gradeRepository.findById(id).get();
+    public Optional<Grade> findById(Long id) {
+        return gradeRepository.findById(id);
     }
 
     public List<Grade> saveAll(List<Grade> grades) {
@@ -81,8 +82,12 @@ public class GradeService {
         return (List<Grade>) gradeRepository.findAllByStudentId(studentId);
     }
 
-    public Grade getGradeByStudentIdAndCourseId(Long studentId, Long courseId) {
+    public Optional<Grade> getGradeByStudentIdAndCourseId(Long studentId, Long courseId) {
         return gradeRepository.findByStudentIdAndCourseId(studentId, courseId);
+    }
+
+    public void deleteAllByStudentIdAndCourseId(Long studentId, Long courseId) {
+        gradeRepository.deleteAllByStudentIdAndCourseId(studentId, courseId);
     }
 
     // Without cascade, delete grades with student deletion

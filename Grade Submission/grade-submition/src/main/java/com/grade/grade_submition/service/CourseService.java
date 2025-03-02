@@ -2,6 +2,7 @@ package com.grade.grade_submition.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,8 +61,8 @@ public class CourseService {
         return null;
     }
 
-    public Course getCourseById(Long id) {
-        return courseRepository.findById(id).get();
+    public Optional<Course> getCourseById(Long id) {
+        return courseRepository.findById(id);
     }
 
     public Course saveCourse(Course course) {
