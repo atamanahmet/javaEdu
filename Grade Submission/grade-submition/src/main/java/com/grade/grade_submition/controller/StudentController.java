@@ -1,5 +1,7 @@
 package com.grade.grade_submition.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,21 +33,23 @@ public class StudentController {
 
     @GetMapping("/student/{id}")
     public ResponseEntity<Object> getStudentById(@PathVariable(required = false, value = "id") Long id) {
-        if (studentService.existsById(id)) {
-            return new ResponseEntity<>(studentService.findById(id), HttpStatus.OK);
+        Optional<Student> student = studentService.findById(id);
+        return (student.isPresent()) ? new ResponseEntity<>(student, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/student/delete/{studentId}")
-    public ResponseEntity<Object> deleteStudentById(
+    public ResponseEntity<HttpStatus> deleteStudentById(
             @PathVariable(required = true, value = "studentId") Long studentId) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
 
-        // gradeService.deleteGradesByStudentId(studentId);
+        if (studentService.existsById(studentId)) {
+            studentService.deleteById(studentId);
+            status = HttpStatus.NO_CONTENT;
+        }
+        return new ResponseEntity<>(status);
 
-        studentService.deleteById(studentId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/student")
@@ -54,6 +58,6 @@ public class StudentController {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<Student>(studentService.save(student), HttpStatus.CREATED);
+        return new ResponseEntity<>(studentService.save(student), HttpStatus.CREATED);
     }
 }

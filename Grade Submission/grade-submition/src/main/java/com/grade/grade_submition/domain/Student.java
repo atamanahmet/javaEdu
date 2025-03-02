@@ -11,15 +11,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "students")
 @AllArgsConstructor
+@Getter
+@Setter
 public class Student {
     @Id
     @Column(name = "id")
@@ -37,6 +42,10 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Grade> grades;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "studentList", cascade = CascadeType.ALL)
+    private List<Course> courseList;
 
     public Student() {
 
@@ -65,4 +74,5 @@ public class Student {
     public void setbirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
+
 }

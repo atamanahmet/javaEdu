@@ -49,7 +49,7 @@ public class GradeController {
     }
 
     @GetMapping("/grade/student/{studentId}/course/{courseId}")
-    public ResponseEntity<Object> getGradeByBothIds(@PathVariable(value = "studentId") Long studentId,
+    public ResponseEntity<Optional<Grade>> getGradeByBothIds(@PathVariable(value = "studentId") Long studentId,
             @PathVariable(value = "courseId") Long courseId) {
 
         Optional<Grade> grade = gradeService.getGradeByStudentIdAndCourseId(studentId, courseId);
@@ -59,18 +59,31 @@ public class GradeController {
     }
 
     @PostMapping("/grade/course/{courseId}/student/{studentId}")
-    public ResponseEntity<Grade> createGrade(@Valid @RequestBody Grade grade, BindingResult result,
+    public ResponseEntity<?> createGrade(@Valid @RequestBody Grade grade, BindingResult result,
             @PathVariable(required = true) Long studentId,
             @PathVariable(required = true, value = "courseId") Long courseId) {
 
         if (result.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<HttpStatus>(HttpStatus.NOT_ACCEPTABLE);
 
         } else if (studentService.existsById(studentId) && courseService.isExistsById(courseId)) {
-            return new ResponseEntity<Grade>(gradeService.saveGrade(grade, studentId, courseId),
-                    HttpStatus.CREATED);
+
+            try {
+
+                courseService.saveStudentList(courseId, studentService.findById(studentId).get());
+                studentService.saveCourseList(studentId, courseService.getCourseById(courseId).get());
+
+                return new ResponseEntity<Grade>(gradeService.saveGrade(grade, studentId, courseId),
+                        HttpStatus.CREATED);
+            } catch (Exception e) {
+
+                return new ResponseEntity<String>(
+                        "Duplicate grade. Each student can have only one grade from each course.",
+                        HttpStatus.NOT_ACCEPTABLE);
+            }
+
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
 
         }
 
@@ -87,15 +100,6 @@ public class GradeController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
-
-    // @DeleteMapping("grade/delete/{id}")
-    // public ResponseEntity<HttpStatus>
-    // deleteByStudentIdAndCourseId(@PathVariable(required = true, value =
-    // "studentId") Long studentId,
-    // @PathVariable(required = true, value = "courseId") Long courseId) {
-    // gradeService.deleteAllByStudentIdAndCourseId(studentId, courseId);
-    // return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    // }
 
     @DeleteMapping("grade/delete/all")
     public ResponseEntity<HttpStatus> deleteAll() {

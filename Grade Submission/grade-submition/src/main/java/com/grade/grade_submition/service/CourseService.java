@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grade.grade_submition.domain.Course;
+import com.grade.grade_submition.domain.Student;
 import com.grade.grade_submition.repository.CourseRepository;
 
 @Service
@@ -73,6 +74,10 @@ public class CourseService {
         List<Course> savedCourseList = new ArrayList<>();
         courseRepository.saveAll(courseList).iterator().forEachRemaining(course -> savedCourseList.add(course));
         return savedCourseList;
+    }
+
+    public void saveStudentList(Long courseId, Student student) {
+        courseRepository.findById(courseId).get().getStudentList().add(student);
     }
 
 }

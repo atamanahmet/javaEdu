@@ -1,6 +1,7 @@
 package com.grade.grade_submition.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,13 +31,26 @@ public class CourseController {
         return new ResponseEntity<>(courseService.getAllCourses(), HttpStatus.OK);
     }
 
-    @PostMapping("/course")
-    public ResponseEntity<Course> saveCourse(@Valid @RequestBody Course course, BindingResult result) {
-        if (result.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<Course> getCourseById(
+            @PathVariable(required = true, value = "courseId") Long courseId) {
+        Optional<Course> course = courseService.getCourseById(courseId);
 
-        return new ResponseEntity<>(courseService.saveCourse(course), HttpStatus.CREATED);
+        return (course.isPresent()) ? new ResponseEntity<>(course.get(), HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/course")
+    public ResponseEntity<?> saveCourse(@Valid @RequestBody Course course, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<HttpStatus>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        try {
+            return new ResponseEntity<Course>(courseService.saveCourse(course), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("Course already exist. Enter a different course.",
+                    HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     @DeleteMapping("/course/delete/{courseId}")

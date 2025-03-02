@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.grade.grade_submition.domain.Course;
 import com.grade.grade_submition.domain.Student;
 import com.grade.grade_submition.repository.StudentRepository;
 
@@ -66,6 +67,10 @@ public class StudentService {
 
     public List<Student> saveAll(List<Student> students) {
         return (List<Student>) studentRepository.saveAll(students);
+    }
+
+    public void saveCourseList(Long studentId, Course course) {
+        studentRepository.findById(studentId).get().getCourseList().add(course);
     }
 
 }
