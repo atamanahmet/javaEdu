@@ -1,6 +1,7 @@
 package com.grade.grade_submition.domain;
 
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,7 +24,6 @@ import lombok.Setter;
 @Table(name = "course")
 @Getter
 @Setter
-
 public class Course {
 
     @Id
@@ -48,7 +48,7 @@ public class Course {
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
-    private List<Student> studentList;
+    private Set<Student> studentList;
 
     public Course() {
 
@@ -62,16 +62,15 @@ public class Course {
         this.gradeList = gradeList;
     }
 
-    public List<Student> getStudentList() {
+    public Set<Student> getStudentList() {
         return studentList;
     }
 
-    public void setStudentList(List<Student> studentList) {
+    public void setStudentList(Set<Student> studentList) {
         this.studentList = studentList;
     }
 
-    public Course(Long id, @NotNull String name, @NotNull String courseCode, String description) {
-        this.id = id;
+    public Course(@NotNull String name, @NotNull String courseCode, String description) {
         this.name = name;
         this.courseCode = courseCode;
         this.description = description;

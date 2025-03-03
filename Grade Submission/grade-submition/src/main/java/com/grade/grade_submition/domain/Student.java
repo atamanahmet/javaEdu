@@ -2,6 +2,7 @@ package com.grade.grade_submition.domain;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,13 +17,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "students")
-@AllArgsConstructor
 @Getter
 @Setter
 public class Student {
@@ -45,9 +44,15 @@ public class Student {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "studentList", cascade = CascadeType.ALL)
-    private List<Course> courseList;
+    private Set<Course> courseList;
 
     public Student() {
+
+    }
+
+    public Student(String name, LocalDate birthDate) {
+        this.name = name;
+        this.birthDate = birthDate;
 
     }
 
