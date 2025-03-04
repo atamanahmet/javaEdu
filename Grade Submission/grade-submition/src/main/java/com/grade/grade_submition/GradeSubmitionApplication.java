@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.grade.grade_submition.domain.Course;
 import com.grade.grade_submition.domain.Student;
@@ -56,6 +58,11 @@ public class GradeSubmitionApplication implements CommandLineRunner {
 			courseRepository.save(courses[i]);
 		}
 
+	}
+
+	@Bean
+	public BCryptPasswordEncoder bCryptEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }
