@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,12 +23,15 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilter(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(csrf -> csrf.disable())
+        httpSecurity
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> {
                     request
-                            .requestMatchers(HttpMethod.GET).permitAll()
+                            .requestMatchers(HttpMethod.GET, "/signup").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/user/register").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/**").hasAnyRole("ADMIN", "USER")
                             .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.POST).hasAnyRole("ADMIN")
                             .anyRequest()
                             .authenticated();
                 })

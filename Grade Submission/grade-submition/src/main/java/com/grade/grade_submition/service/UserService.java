@@ -1,11 +1,14 @@
 package com.grade.grade_submition.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.grade.grade_submition.domain.User;
+import com.grade.grade_submition.exceptions.ContentNotFoundException;
 import com.grade.grade_submition.repository.UserRepository;
 
 @Service
@@ -14,7 +17,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public User saveUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -22,17 +29,23 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteUserById(Long id) throws Exception {
         if (userRepository.existsById(id))
             userRepository.deleteById(id);
+        else
+            throw new ContentNotFoundException("User", id);
     }
 
-    public Optional<User> findUserByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+    public Optional<User> findUserByUserName(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public boolean isExistsById(Long id) {
         return userRepository.existsById(id);
+    }
+
+    public List<User> getUsers() {
+        return (List<User>) userRepository.findAll();
     }
 
 }

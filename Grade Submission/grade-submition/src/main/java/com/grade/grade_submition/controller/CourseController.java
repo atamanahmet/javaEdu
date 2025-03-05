@@ -54,13 +54,11 @@ public class CourseController {
     }
 
     @DeleteMapping("/course/delete/{courseId}")
-    public ResponseEntity<HttpStatus> deleteCourse(@PathVariable(required = true, value = "courseId") Long courseId) {
-        if (courseService.isExistsById(courseId)) {
-            courseService.deleteById(courseId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<HttpStatus> deleteCourse(@PathVariable(required = true, value = "courseId") Long courseId)
+            throws Exception {
 
+        courseService.deleteById(courseId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

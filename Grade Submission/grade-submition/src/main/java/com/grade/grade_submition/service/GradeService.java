@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grade.grade_submition.domain.Grade;
+import com.grade.grade_submition.exceptions.ContentNotFoundException;
 import com.grade.grade_submition.repository.CourseRepository;
 import com.grade.grade_submition.repository.GradeRepository;
 import com.grade.grade_submition.repository.StudentRepository;
@@ -45,8 +46,11 @@ public class GradeService {
         gradeRepository.deleteAllById(ids);
     }
 
-    public void deleteById(Long id) {
-        gradeRepository.deleteById(id);
+    public void deleteById(Long id) throws Exception {
+        if (gradeRepository.existsById(id))
+            gradeRepository.deleteById(id);
+        else
+            throw new ContentNotFoundException("Grade", id);
 
     }
 

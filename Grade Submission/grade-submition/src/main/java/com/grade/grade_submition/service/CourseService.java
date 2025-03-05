@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.grade.grade_submition.domain.Course;
 import com.grade.grade_submition.domain.Student;
+import com.grade.grade_submition.exceptions.ContentNotFoundException;
 import com.grade.grade_submition.repository.CourseRepository;
 
 @Service
@@ -37,8 +38,11 @@ public class CourseService {
         courseRepository.deleteAllById(idList);
     }
 
-    public void deleteById(Long id) {
-        courseRepository.deleteById(id);
+    public void deleteById(Long id) throws Exception {
+        if (courseRepository.existsById(id))
+            courseRepository.deleteById(id);
+        else
+            throw new ContentNotFoundException("Course", id);
     }
 
     public boolean isExistsById(Long id) {

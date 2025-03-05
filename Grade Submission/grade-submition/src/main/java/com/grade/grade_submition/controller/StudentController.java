@@ -41,14 +41,9 @@ public class StudentController {
 
     @DeleteMapping("/student/delete/{studentId}")
     public ResponseEntity<HttpStatus> deleteStudentById(
-            @PathVariable(required = true, value = "studentId") Long studentId) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-
-        if (studentService.existsById(studentId)) {
-            studentService.deleteById(studentId);
-            status = HttpStatus.NO_CONTENT;
-        }
-        return new ResponseEntity<>(status);
+            @PathVariable(required = true, value = "studentId") Long studentId) throws Exception {
+        studentService.deleteById(studentId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 
