@@ -48,6 +48,15 @@ public class UserController {
         return new ResponseEntity<>("User registered succesfully", HttpStatus.CREATED);
     }
 
+    // @PostMapping("/login")
+    // public ResponseEntity<Object> loginAuth(@Valid @RequestBody User user,
+    // BindingResult result) {
+    // if (result.hasErrors()) {
+    // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // }
+    // return new ResponseEntity<>(HttpStatus.OK);
+    // }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<Optional<User>> getUser(@PathVariable(required = true, value = "userId") Long userId) {
         // if (auth == true) {

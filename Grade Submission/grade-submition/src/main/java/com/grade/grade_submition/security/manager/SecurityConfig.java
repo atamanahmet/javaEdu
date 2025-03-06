@@ -1,4 +1,4 @@
-package com.grade.grade_submition.security;
+package com.grade.grade_submition.security.manager;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.grade.grade_submition.security.filter.AuthenticationFilter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
@@ -23,6 +25,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilter(HttpSecurity httpSecurity) throws Exception {
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
+        authenticationFilter.setFilterProcessesUrl("/login");
+
         httpSecurity
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
@@ -34,7 +39,7 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                             .anyRequest()
                             .authenticated();
-                })
+                }).addFilter(authenticationFilter)
                 .httpBasic(Customizer.withDefaults());
         return httpSecurity.build();
     }
