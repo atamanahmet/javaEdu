@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.grade.grade_submition.domain.User;
 import com.grade.grade_submition.exceptions.ContentNotFoundException;
+import com.grade.grade_submition.exceptions.UserAlreadyExistException;
 import com.grade.grade_submition.repository.UserRepository;
 
 @Service
@@ -21,6 +22,9 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User saveUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new UserAlreadyExistException("User already exist.");
+        }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

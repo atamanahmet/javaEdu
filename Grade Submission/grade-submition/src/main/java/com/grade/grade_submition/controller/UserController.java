@@ -38,6 +38,7 @@ public class UserController {
 
     @PostMapping("/user/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody User user, BindingResult result) {
+        // System.out.println("register post making");
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
@@ -55,10 +56,10 @@ public class UserController {
     // }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Optional<User>> getUser(@PathVariable(required = true, value = "userId") Long userId) {
+    public ResponseEntity<Object> getUser(@PathVariable(required = true, value = "userId") Long userId) {
         // if (auth == true) {
         if (userService.isExistsById(userId)) {
-            return new ResponseEntity<>(userService.findUserById(userId), HttpStatus.OK);
+            return new ResponseEntity<>(userService.findUserById(userId).get().getUsername(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         // }

@@ -1,5 +1,6 @@
 package com.grade.grade_submition.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,8 +25,10 @@ public class User {
     private Long userId;
 
     @NotBlank(message = "username cannot be empty")
+    @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false, unique = true)
     @NotBlank(message = "password cannot be empty")
     private String password;
 }

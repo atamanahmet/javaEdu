@@ -42,18 +42,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-
         try {
             User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
-            // System.out.println(user.getUsername());
-            // System.out.println(user.getPassword());
 
             return authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),
                             user.getPassword()));
-
         } catch (IOException e) {
-            // System.out.println("RuntimeException");
             throw new RuntimeException();
         }
 
@@ -78,9 +73,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .sign(Algorithm.HMAC256(SecurityConstants.SECRET_KEY));
 
         response.addHeader(SecurityConstants.AUTHORIZATION, SecurityConstants.BEARER + token);
-        // response.setStatus(200);
-        // response.getWriter().write("Authentication successfull");
-        // System.out.println("Authentication successfull");
+        response.getWriter().write("Authorization successfull");
     }
 
 }
