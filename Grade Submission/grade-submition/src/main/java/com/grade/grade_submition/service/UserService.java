@@ -36,8 +36,10 @@ public class UserService {
             throw new ContentNotFoundException("User", id);
     }
 
-    public Optional<User> findUserByUserName(String username) {
-        return userRepository.findByUsername(username);
+    public User findUserByUserName(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return unWrapUser(user, username);
+
     }
 
     public boolean isExistsById(Long id) {
@@ -46,6 +48,15 @@ public class UserService {
 
     public List<User> getUsers() {
         return (List<User>) userRepository.findAll();
+    }
+
+    static User unWrapUser(Optional<User> user, String username) {
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new ContentNotFoundException("Username doesn't exist ", 404L);
+
+        }
     }
 
 }

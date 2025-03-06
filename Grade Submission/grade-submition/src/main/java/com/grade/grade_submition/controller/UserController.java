@@ -41,9 +41,6 @@ public class UserController {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        if (userService.findUserByUserName(user.getUsername()).isPresent()) {
-            return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
-        }
         userService.saveUser(user);
         return new ResponseEntity<>("User registered succesfully", HttpStatus.CREATED);
     }

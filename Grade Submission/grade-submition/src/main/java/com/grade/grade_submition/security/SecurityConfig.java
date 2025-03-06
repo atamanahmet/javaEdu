@@ -1,4 +1,4 @@
-package com.grade.grade_submition.security.manager;
+package com.grade.grade_submition.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.grade.grade_submition.security.filter.AuthenticationFilter;
+import com.grade.grade_submition.security.filter.ExceptionHandlerFilter;
+import com.grade.grade_submition.security.manager.CustomAuthenticationManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,10 +25,14 @@ public class SecurityConfig {
     @Autowired
     BCryptPasswordEncoder bCryptEncoder;
 
+    @Autowired
+    private CustomAuthenticationManager authenticationManager;
+
     @Bean
     public SecurityFilterChain securityFilter(HttpSecurity httpSecurity) throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
-        authenticationFilter.setFilterProcessesUrl("/login");
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager);
+
+        authenticationFilter.setFilterProcessesUrl("/authenticate");
 
         httpSecurity
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -39,7 +45,9 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                             .anyRequest()
                             .authenticated();
-                }).addFilter(authenticationFilter)
+                })
+                .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
+                .addFilter(authenticationFilter)
                 .httpBasic(Customizer.withDefaults());
         return httpSecurity.build();
     }
