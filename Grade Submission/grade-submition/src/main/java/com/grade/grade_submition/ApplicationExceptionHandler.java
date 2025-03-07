@@ -12,7 +12,6 @@ import com.grade.grade_submition.exceptions.UserAlreadyExistException;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
-    // @Override
     @ExceptionHandler(ContentNotFoundException.class)
     public ResponseEntity<Object> handleContentNotFoundException(ContentNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatusCode.valueOf(404));

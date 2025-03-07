@@ -30,12 +30,10 @@ public class GradeService {
 
     public void delete(Grade grade) {
         gradeRepository.delete(grade);
-
     }
 
     public void deleteAll() {
         gradeRepository.deleteAll();
-
     }
 
     public void deleteAll(List<Grade> grades) {
@@ -51,7 +49,6 @@ public class GradeService {
             gradeRepository.deleteById(id);
         else
             throw new ContentNotFoundException("Grade", id);
-
     }
 
     public boolean existsById(Long id) {
@@ -93,32 +90,4 @@ public class GradeService {
     public void deleteAllByStudentIdAndCourseId(Long studentId, Long courseId) {
         gradeRepository.deleteAllByStudentIdAndCourseId(studentId, courseId);
     }
-
-    // Without cascade, delete grades with student deletion
-
-    // public void deleteGradesByStudentId(Long studentId) {
-
-    // gradeRepository.deleteAllById(gradeRepository.findAllByStudentId(studentId)
-    // .stream()
-    // .map(grade -> grade.getId())
-    // .collect(Collectors.toList()));
-
-    // OLD
-    // List<Long> gradeIdList = new ArrayList<>();
-
-    // gradeRepository.findAllByStudentId(studentId).iterator()
-    // .forEachRemaining(grade -> gradeIdList.add(grade.getId()));
-    // gradeRepository.deleteAllById(gradeIdList);
-
-    // }
-
-    // Without interface custom method, getAllGradesFromStudent
-
-    // public List<Grade> getGradesFromStudentId(Long studentId) {
-    // List<Grade> gradeList = (List<Grade>) gradeRepository.findAll();
-    // return gradeList.stream().filter(grade -> grade.getStudent().getId() ==
-    // studentId).collect(Collectors.toList());
-
-    // }
-
 }

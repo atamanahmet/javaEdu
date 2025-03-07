@@ -18,10 +18,6 @@ import com.grade.grade_submition.security.manager.CustomAuthenticationManager;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-// import jakarta.servlet.FilterChain;
-// import jakarta.servlet.ServletException;
-// import jakarta.servlet.ServletRequest;
-// import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -31,13 +27,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
     private CustomAuthenticationManager authenticationManager;
-
-    // @Override
-    // public void doFilter(ServletRequest request, ServletResponse response,
-    // FilterChain chain)
-    // throws IOException, ServletException {
-    // chain.doFilter(request, response);
-    // }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)

@@ -18,14 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
-    // @Override
-    // protected boolean shouldNotFilter(HttpServletRequest request) throws
-    // ServletException {
-    // String registerPath = request.getServletPath();
-    // return registerPath.equals("/user/register") ||
-    // registerPath.equals("/signup");
-    // }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {

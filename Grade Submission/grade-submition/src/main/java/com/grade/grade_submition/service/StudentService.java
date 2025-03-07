@@ -23,17 +23,14 @@ public class StudentService {
 
     public void delete(Student student) {
         studentRepository.delete(student);
-
     }
 
     public void deleteAll() {
         studentRepository.deleteAll();
-
     }
 
     public void deleteAll(List<Student> students) {
         studentRepository.deleteAll(students);
-
     }
 
     public void deleteAllById(List<Long> ids) {
@@ -45,12 +42,10 @@ public class StudentService {
             studentRepository.deleteById(id);
         else
             throw new ContentNotFoundException("Student", id);
-
     }
 
     public boolean existsById(Long id) {
         return studentRepository.existsById(id);
-
     }
 
     public List<Student> findAll() {

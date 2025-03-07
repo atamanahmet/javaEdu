@@ -51,7 +51,6 @@ public class Course {
     private Set<Student> studentList;
 
     public Course() {
-
     }
 
     public List<Grade> getGradeList() {

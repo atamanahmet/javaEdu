@@ -47,13 +47,11 @@ public class Student {
     private Set<Course> courseList;
 
     public Student() {
-
     }
 
     public Student(String name, LocalDate birthDate) {
         this.name = name;
         this.birthDate = birthDate;
-
     }
 
     public long getId() {

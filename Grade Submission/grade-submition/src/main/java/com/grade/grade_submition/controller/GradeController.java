@@ -69,7 +69,6 @@ public class GradeController {
         } else if (studentService.existsById(studentId) && courseService.isExistsById(courseId)) {
 
             try {
-
                 courseService.saveStudentList(courseId, studentService.findById(studentId).get());
                 studentService.saveCourseList(studentId, courseService.getCourseById(courseId).get());
 
@@ -84,9 +83,7 @@ public class GradeController {
 
         } else {
             return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
-
         }
-
     }
 
     @DeleteMapping("/grade/delete/student/{studentId}/course/{courseId}")

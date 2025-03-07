@@ -33,7 +33,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilter(HttpSecurity httpSecurity) throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager);
-
         authenticationFilter.setFilterProcessesUrl("/authenticate");
 
         httpSecurity
@@ -52,25 +51,4 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults());
         return httpSecurity.build();
     }
-
-    // @Bean
-    // public UserDetailsService userDetails() {
-    // UserDetails admin = User.builder()
-    // .username("admin")
-    // .password(bCryptEncoder.encode("adminpass"))
-    // .roles("ADMIN")
-    // .build();
-    // // System.out.println(admin.getPassword());
-    // UserDetails user = User.builder()
-    // .username("user")
-    // .password(bCryptEncoder.encode("adminpass"))
-    // .roles("USER")
-    // .build();
-
-    // System.out.println("Admin roles: " + admin.getAuthorities()); // Debug print
-    // System.out.println("User roles: " + user.getAuthorities()); // Debug print
-
-    // return new InMemoryUserDetailsManager(admin, user);
-    // }
-
 }

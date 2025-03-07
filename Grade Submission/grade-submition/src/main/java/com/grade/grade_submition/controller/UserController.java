@@ -1,19 +1,18 @@
 package com.grade.grade_submition.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.grade.grade_submition.domain.User;
 import com.grade.grade_submition.service.UserService;
 
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,24 +45,12 @@ public class UserController {
         return new ResponseEntity<>("User registered succesfully", HttpStatus.CREATED);
     }
 
-    // @PostMapping("/login")
-    // public ResponseEntity<Object> loginAuth(@Valid @RequestBody User user,
-    // BindingResult result) {
-    // if (result.hasErrors()) {
-    // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    // }
-    // return new ResponseEntity<>(HttpStatus.OK);
-    // }
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<Object> getUser(@PathVariable(required = true, value = "userId") Long userId) {
-        // if (auth == true) {
         if (userService.isExistsById(userId)) {
             return new ResponseEntity<>(userService.findUserById(userId).get().getUsername(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        // }
-
     }
 
     @DeleteMapping("/delete/user/{userId}")
