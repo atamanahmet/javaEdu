@@ -29,7 +29,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (ContentNotFoundException contentNotFoundException) {
             response.setStatus(404);
-            response.getWriter().write("Username doesn't exist");
+            response.getWriter().write("Content doesn't exist");
         } catch (JWTVerificationException ex) {
             response.setStatus(403);
             response.getWriter().write("Unauthorized access.");

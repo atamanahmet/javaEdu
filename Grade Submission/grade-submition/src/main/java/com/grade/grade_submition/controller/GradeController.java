@@ -64,7 +64,7 @@ public class GradeController {
             @PathVariable(required = true, value = "courseId") Long courseId) {
 
         if (result.hasErrors()) {
-            return new ResponseEntity<HttpStatus>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
         } else if (studentService.existsById(studentId) && courseService.isExistsById(courseId)) {
 
@@ -73,11 +73,11 @@ public class GradeController {
                 courseService.saveStudentList(courseId, studentService.findById(studentId).get());
                 studentService.saveCourseList(studentId, courseService.getCourseById(courseId).get());
 
-                return new ResponseEntity<Grade>(gradeService.saveGrade(grade, studentId, courseId),
+                return new ResponseEntity<>(gradeService.saveGrade(grade, studentId, courseId),
                         HttpStatus.CREATED);
             } catch (Exception e) {
 
-                return new ResponseEntity<String>(
+                return new ResponseEntity<>(
                         "Duplicate grade. Each student can have only one grade from each course.",
                         HttpStatus.NOT_ACCEPTABLE);
             }
