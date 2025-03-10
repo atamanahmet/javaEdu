@@ -1,16 +1,25 @@
 version: '3.3'
 services:
-  postgresql:
-    image:            # The Docker image to use for the PostgreSQL service
-    environment:      # Environment variables passed into the PostgreSQL container 
-                      # (Database name, user, and password can be initialized here – See the docker docs for PostgreSQL)
+  mysqldb:
+    image: mysql:latest # The Docker image to use for the PostgreSQL service
+    environment:
+      # Environment variables passed into the PostgreSQL container 
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_USER: 'user'
+      MYSQL_DATABASE: 'db' # (Database name, user, and password can be initialized here – See the docker docs for PostgreSQL)
     ports:
-      -  # Port mapping between the host and the container
+      - 8080:8080 # Port mapping between the host and the container
 
-  flaskapp:
-    image:            # The Docker image to use for the Flask application service
-    depends_on:       
-      -               # Does this service depend on the creation of other services before it?
-    environment:      # Environment variables passed into the flask application 
+  flask-app:
+    image: flask-app:0.0.1 # The Docker image to use for the Flask application service
+    depends_on:
+      - postgresql # Does this service depend on the creation of other services before it?
+    environment:
+      #  POSTGRES_PASSWORD: example 
+      DATABASE_HOST: host.docker.internal:8080
+      DATABASE_NAME: 'db'
+      DATABASE_PASSWORD: 'password'
+      DATABASE_USER: 'user' # Environment variables passed into the flask application 
     ports:
-      -  # Port mapping between the host and the container
+      - 7777:3000 # Port mapping between the host and the container
