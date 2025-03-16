@@ -4,4 +4,4 @@ metadata:
   name: grade-submission-portal-config
   namespace: grade-submission
 data:
-  GRADE_SERVICE_HOST: submission
+  GRADE_SERVICE_HOST: grade-submission-api

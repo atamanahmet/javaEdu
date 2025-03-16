@@ -19,14 +19,14 @@ spec:
       containers:
         - name: mongodb
           image: mongo:4.4
-          # envFrom:
-          #   - secretRef:
-          #       name: mongodb-secret
-          env:
-            - name: MONGO_INITDB_ROOT_USERNAME
-              value: admin
-            - name: MONGO_INITDB_ROOT_PASSWORD
-              value: password123
+          envFrom:
+            - secretRef:
+                name: mongodb-secret
+          # env:
+          #   - name: MONGO_INITDB_ROOT_USERNAME
+          #     value: admin
+          #   - name: MONGO_INITDB_ROOT_PASSWORD
+          #     value: password123
           ports:
             - containerPort: 27017
           volumeMounts:
