@@ -19,6 +19,9 @@ spec:
       containers:
         - name: mongodb
           image: mongo:4.4
+          # envFrom:
+          #   - secretRef:
+          #       name: mongodb-secret
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               value: admin

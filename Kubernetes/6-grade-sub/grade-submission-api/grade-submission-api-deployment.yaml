@@ -18,6 +18,11 @@ spec:
       containers:
         - name: grade-submission-api
           image: rslim087/kubernetes-course-grade-submission-api:stateless-v3
+          # envFrom:
+          #   - configMapRef:
+          #       name: grade-submission-api-config
+          #   - secretRef:
+          #       name: grade-submission-api-secret
           env:
             - name: MONGODB_HOST
               value: mongodb
